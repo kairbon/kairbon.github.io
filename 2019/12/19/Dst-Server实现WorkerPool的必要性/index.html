@@ -401,7 +401,7 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>​    （本文适合对Dst项目有一定认识的人阅读）<a href="https://github.com/dst-project/dst" target="_blank" rel="noopener">项目地址</a></p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>​    （本文适合对Dst项目有一定认识的人阅读）<a target="_blank" rel="noopener" href="https://github.com/dst-project/dst">项目地址</a></p>
 <p>​    最近，我一直有一个问题，我始终没有思考明白，Dst中，Dst-Server 要采用WorkerPool的模型去进行数据操作的必要性有多大，因为从实现角度而言，Dst所采用的DRPC是基于Netty的。对于Netty来说，他的Worker线程池完全可以复用。比如加一个ThreadLocal的变量，也就是Shard。按照架构设计的话也是没有问题的，而且Netty的Worker线程中也有BlockingQueue，这样对一个Shard的操作也是不会出现冲突的情况，会按照入队的顺序去执行相应的操作。所以从实现角度来说说不定这种方法的实现成本也较低。下面就是我对这个问题的一些思考。</p>
 <h3 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h3><p>​    其实从我个人思考角度，设计这种结构的最重要的原因是 <strong>解耦</strong>。为什么这样说呢？首先，我觉得虽然前言提到的复用的方法是一种看似可行的策略，但是这会使得整个DRPC和Dst会有很大的耦合，不利于DRPC项目的发展。当然这个理由其实不太成立，因为如果对于Dst来说，RPC只是其中一部分，没有必要为了RPC放弃全部。但是除了RPC部分，我们的分布式架构还包括主从同步，数据迁移，容灾恢复，等部分，这些部分每一个都和shard的结构有着千丝万缕的关系，如果考虑了这一点，就不能更好的考虑另一点，而且每做一步都得考虑这对于远程传输性能的影响，从某种程度上增加了思考的负担。和代码编写的难度。</p>
 <p>​    除此之外，  解耦的另一大好处就是软件升级的成本小，比如我们RPC要做保序的话，完全就可以不考虑其他的限制，只在RPC层面进行考虑。比如如果出现了比Netty性能好的RPC，而线程模型又和Netty不一样，我们就可以无缝切换。但耦合就不行。</p>
@@ -721,6 +721,14 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 15
@@ -793,12 +801,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/" >Nginx集群conf文件</a>
+            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/GA-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95-%E6%A6%82%E5%BF%B5%E7%90%86%E8%A7%A3/" >GA(遗传算法)概念理解</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/GA-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95-%E6%A6%82%E5%BF%B5%E7%90%86%E8%A7%A3/" >GA(遗传算法)概念理解</a>
+            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/" >Nginx集群conf文件</a>
         </li>
     
     
@@ -832,8 +840,6 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="初学者"><span class="iconfont-archer">&#xe606;</span>初学者</span>
     
-        <span class="sidebar-tag-name" data-tags="量子计算"><span class="iconfont-archer">&#xe606;</span>量子计算</span>
-    
         <span class="sidebar-tag-name" data-tags="git"><span class="iconfont-archer">&#xe606;</span>git</span>
     
         <span class="sidebar-tag-name" data-tags="软件工程"><span class="iconfont-archer">&#xe606;</span>软件工程</span>
@@ -841,6 +847,8 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="数据库 源码"><span class="iconfont-archer">&#xe606;</span>数据库 源码</span>
     
         <span class="sidebar-tag-name" data-tags="这就是生活"><span class="iconfont-archer">&#xe606;</span>这就是生活</span>
+    
+        <span class="sidebar-tag-name" data-tags="量子计算"><span class="iconfont-archer">&#xe606;</span>量子计算</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>

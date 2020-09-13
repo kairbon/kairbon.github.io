@@ -402,7 +402,7 @@ height:50vh;
             <main class="main post-page">
     <article class="article-entry">
         <p><strong>首先，我先声明，本人并不研究机器学习或人工智能，这篇文章主要是为了偶尔使用一下某个算法所作的分析</strong></p>
-<h3 id="1-从官网说起"><a href="#1-从官网说起" class="headerlink" title="1.从官网说起"></a>1.从官网说起</h3><p>  首先，可以从搜索引擎很轻易搜索到它的pypi网址：<br>  <a href="https://pypi.org/project/cma/" target="_blank" rel="noopener">https://pypi.org/project/cma/</a><br>  打开后，我们可以看到如何去安装cma。目前版本为<br>  <img src="/images/pasted-0.png" alt="upload successful"><br>  这里我就把如何安装跳过，直接进入api分析：</p>
+<h3 id="1-从官网说起"><a href="#1-从官网说起" class="headerlink" title="1.从官网说起"></a>1.从官网说起</h3><p>  首先，可以从搜索引擎很轻易搜索到它的pypi网址：<br>  <a target="_blank" rel="noopener" href="https://pypi.org/project/cma/">https://pypi.org/project/cma/</a><br>  打开后，我们可以看到如何去安装cma。目前版本为<br>  <img src="/images/pasted-0.png" alt="upload successful"><br>  这里我就把如何安装跳过，直接进入api分析：</p>
 <h3 id="2-API分析"><a href="#2-API分析" class="headerlink" title="2.API分析"></a>2.API分析</h3><p>这是官网用例的第一个，是在python Shell中运行的</p>
 <pre><code>&gt;&gt;&gt; import cma
 &gt;&gt;&gt; help(cma)
@@ -499,15 +499,14 @@ CMAEvolutionStrategyResult(xbest=array([1.        , 1.        , 1.        , 1.  
        7.18357672e-09, 1.37685816e-08, 2.72303150e-08, 5.43614293e-08]))</code></pre><p>可以看到，这个迭代输出就更规范了<br>而且也可以输出到文件里<br>这是因为cma算法完成后应该会调用es.stop()<br>在官网上还有一些更细节的logger options 这里就不赘述</p>
 <pre><code>&gt;&gt;&gt; import cma
 &gt;&gt;&gt; cma.s.pprint(cma.CMAOptions(&apos;erb&apos;))
-{&apos;verb_log&apos;: &apos;1  #v verbosity: write data to files every verb_log iteration, writing can be time critical on fast to evaluate functions&apos;
+&#123;&apos;verb_log&apos;: &apos;1  #v verbosity: write data to files every verb_log iteration, writing can be time critical on fast to evaluate functions&apos;
  &apos;verbose&apos;: &apos;1  #v verbosity e.v. of initial/final message, -1 is very quiet, not yet implemented&apos;
  &apos;verb_plot&apos;: &apos;0  #v in fmin(): plot() is called every verb_plot iteration&apos;
  &apos;verb_disp&apos;: &apos;100  #v verbosity: display console output every verb_disp iteration&apos;
  &apos;verb_filenameprefix&apos;: &apos;outcmaes  # output filenames prefix&apos;
  &apos;verb_append&apos;: &apos;0  # initial evaluation counter, if append, do not overwrite output files&apos;
- &apos;verb_time&apos;: &apos;True  #v output timings on console&apos;}</code></pre><p>除此之外，官网上还说，这个算法适合5到100的解空间<br>并且至少需要100次迭代才能得到差不多的数值<br>还有如果不知道选项的含义，可以用</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cma.s.pprint(cma.CMAOptions(<span class="string">'bounds'</span>)) <span class="comment">#以bounds为例</span></span><br></pre></td></tr></table></figure>
-
+ &apos;verb_time&apos;: &apos;True  #v output timings on console&apos;&#125;</code></pre><p>除此之外，官网上还说，这个算法适合5到100的解空间<br>并且至少需要100次迭代才能得到差不多的数值<br>还有如果不知道选项的含义，可以用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cma.s.pprint(cma.CMAOptions(<span class="string">&#x27;bounds&#x27;</span>)) <span class="comment">#以bounds为例</span></span><br></pre></td></tr></table></figure>
 <p>这一句</p>
 
     </article>
@@ -821,6 +820,14 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 15
@@ -893,12 +900,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/" >Nginx集群conf文件</a>
+            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/GA-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95-%E6%A6%82%E5%BF%B5%E7%90%86%E8%A7%A3/" >GA(遗传算法)概念理解</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/GA-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95-%E6%A6%82%E5%BF%B5%E7%90%86%E8%A7%A3/" >GA(遗传算法)概念理解</a>
+            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/" >Nginx集群conf文件</a>
         </li>
     
     
@@ -932,8 +939,6 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="初学者"><span class="iconfont-archer">&#xe606;</span>初学者</span>
     
-        <span class="sidebar-tag-name" data-tags="量子计算"><span class="iconfont-archer">&#xe606;</span>量子计算</span>
-    
         <span class="sidebar-tag-name" data-tags="git"><span class="iconfont-archer">&#xe606;</span>git</span>
     
         <span class="sidebar-tag-name" data-tags="软件工程"><span class="iconfont-archer">&#xe606;</span>软件工程</span>
@@ -941,6 +946,8 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="数据库 源码"><span class="iconfont-archer">&#xe606;</span>数据库 源码</span>
     
         <span class="sidebar-tag-name" data-tags="这就是生活"><span class="iconfont-archer">&#xe606;</span>这就是生活</span>
+    
+        <span class="sidebar-tag-name" data-tags="量子计算"><span class="iconfont-archer">&#xe606;</span>量子计算</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>

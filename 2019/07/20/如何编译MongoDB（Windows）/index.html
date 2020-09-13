@@ -406,11 +406,11 @@ height:50vh;
 <p>  由 C++ 语言编写，MongoDB 是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。</p>
 </li>
 <li><p>如何编译？</p>
-<p>  不说废话，直接开始上手。首先其官网网址为<a href="https://www.mongodb.com/" target="_blank" rel="noopener">https://www.mongodb.com/</a><br>  <img src="/images/pasted-2.png" alt="upload successful"><br>  点击try free即可下载其源码和对应平台二进制<br>  <img src="/images/pasted-3.png" alt="upload successful"><br>  官网server版最新为4.2.0<br>  <img src="/images/pasted-4.png" alt="upload successful"><br>  但github上有更新的版本<a href="https://github.com/mongodb" target="_blank" rel="noopener">https://github.com/mongodb</a><br>  <img src="/images/pasted-5.png" alt="upload successful"><br>  通过git clone即可。目录如下<br>  <img src="/images/pasted-6.png" alt="upload successful"><br>  根据github上的readme可以看到，在./docs目录下，有building.md文件，这里面有着相关教程教授如何编译。</p>
+<p>  不说废话，直接开始上手。首先其官网网址为<a target="_blank" rel="noopener" href="https://www.mongodb.com/">https://www.mongodb.com/</a><br>  <img src="/images/pasted-2.png" alt="upload successful"><br>  点击try free即可下载其源码和对应平台二进制<br>  <img src="/images/pasted-3.png" alt="upload successful"><br>  官网server版最新为4.2.0<br>  <img src="/images/pasted-4.png" alt="upload successful"><br>  但github上有更新的版本<a target="_blank" rel="noopener" href="https://github.com/mongodb">https://github.com/mongodb</a><br>  <img src="/images/pasted-5.png" alt="upload successful"><br>  通过git clone即可。目录如下<br>  <img src="/images/pasted-6.png" alt="upload successful"><br>  根据github上的readme可以看到，在./docs目录下，有building.md文件，这里面有着相关教程教授如何编译。</p>
 <p>  在4.1.0版本，是可以通过cmake或python2.7的scons脚本去编译他，但在我自己编译的时候，总是因为各种各样的问题导致编译失败。因此选择了最新的github上的master版本。<br>  而在最新版里，只有通过python3.7环境下的scons脚本去编译。</p>
 <p> 在building.md文件里，有着编译的步骤，我在这里写一些注意事项。</p>
 <p> 在windows平台上，是使用msvc作为编译环境，因此最简单的办法就是安装最新版的VS，并且将C++套件全部选满。然后直接按照文档里面的指令开始即可。但如果需要用MinGW作为编译环境，可以参考这个网址 </p>
-<p> <a href="http://www.it1352.com/540290.html" target="_blank" rel="noopener">http://www.it1352.com/540290.html</a></p>
+<p> <a target="_blank" rel="noopener" href="http://www.it1352.com/540290.html">http://www.it1352.com/540290.html</a></p>
 <p> 如果在编译过程中出现报msvc的错，错误信息是说它把warn当成error处理了这样的报告，请参照下面<br> <img src="/images/pasted-7.png" alt="upload successful"></p>
 <p> 还有一点注意的是空间大小。MongoDB的源码分为<br><img src="/images/pasted-8.png" alt="upload successful"><br>这些部分，全部编译下来大概600多G，就是直接用</p>
 <pre><code>python3 buildscripts/scons.py all</code></pre><p>  这条指令的话，但实际上，我们只需要编译mongod即可，编译下来大概13G，但时间也很长，我i5七代，16g的内存大概跑了3，4个小时。</p>
@@ -728,6 +728,14 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 15
@@ -800,12 +808,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/" >Nginx集群conf文件</a>
+            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/GA-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95-%E6%A6%82%E5%BF%B5%E7%90%86%E8%A7%A3/" >GA(遗传算法)概念理解</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/GA-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95-%E6%A6%82%E5%BF%B5%E7%90%86%E8%A7%A3/" >GA(遗传算法)概念理解</a>
+            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/" >Nginx集群conf文件</a>
         </li>
     
     
@@ -839,8 +847,6 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="初学者"><span class="iconfont-archer">&#xe606;</span>初学者</span>
     
-        <span class="sidebar-tag-name" data-tags="量子计算"><span class="iconfont-archer">&#xe606;</span>量子计算</span>
-    
         <span class="sidebar-tag-name" data-tags="git"><span class="iconfont-archer">&#xe606;</span>git</span>
     
         <span class="sidebar-tag-name" data-tags="软件工程"><span class="iconfont-archer">&#xe606;</span>软件工程</span>
@@ -848,6 +854,8 @@ top:50vh;
         <span class="sidebar-tag-name" data-tags="数据库 源码"><span class="iconfont-archer">&#xe606;</span>数据库 源码</span>
     
         <span class="sidebar-tag-name" data-tags="这就是生活"><span class="iconfont-archer">&#xe606;</span>这就是生活</span>
+    
+        <span class="sidebar-tag-name" data-tags="量子计算"><span class="iconfont-archer">&#xe606;</span>量子计算</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
