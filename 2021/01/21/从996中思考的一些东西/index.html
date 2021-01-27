@@ -22,7 +22,7 @@
     <meta name="description" content="">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>CMA-ES 算法步骤 · Kairbon&#39;Blog</title>
+    <title>从996中思考的一些东西 · Kairbon&#39;Blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -217,7 +217,7 @@
                 <a href="/" >Kairbon&#39;Blog.</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">CMA-ES 算法步骤</a>
+                <a href="#" class="post-name">从996中思考的一些东西</a>
             </div>
     </div>
     
@@ -247,7 +247,7 @@ height:50vh;
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            CMA-ES 算法步骤
+            从996中思考的一些东西
             <!-- 404 -->
             
         </h1>
@@ -266,18 +266,18 @@ height:50vh;
                 
                     <div class= post-intro-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Robocup3D">Robocup3D</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "这就是生活">这就是生活</a>
     
 </div>
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">196</span>阅读时长: <span class="post-count reading-time">1 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">1.4k</span>阅读时长: <span class="post-count reading-time">4 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
                     <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2019/07/13</span>
+                    <span class="post-intro-time">2021/01/21</span>
                     
                     <span id="busuanzi_container_page_pv" class="busuanzi-pv">
                         <span class="iconfont-archer">&#xe602;</span>
@@ -401,22 +401,20 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h2 id="CMA-ES-算法步骤"><a href="#CMA-ES-算法步骤" class="headerlink" title="CMA-ES 算法步骤"></a>CMA-ES 算法步骤</h2><p>CMA-ES的核心想法是通过对正态分布 <img src="https://www.zhihu.com/equation?tex=N%28m_t%2C%5Csigma_t%5E2C_t%29" alt="N(m_t,\sigma_t^2C_t)"> 中协方差矩阵 <img src="https://www.zhihu.com/equation?tex=C" alt="C"> 的调整来处理变量之间的依赖关系和scaling。算法基本可以分成以下三步</p>
-<ul>
-<li>采样产生新解；</li>
-<li>计算目标函数值；</li>
-<li>更新分布参数 <img src="https://www.zhihu.com/equation?tex=m_t%2C%7EC_t%2C%7E%5Csigma_t" alt="m_t,~C_t,~\sigma_t"></li>
-</ul>
-<p>ES算法设计的核心就是如何对这些参数进行调整，尤其是步长参数和协方差矩阵的调整，以达到尽可能好的搜索效果。对这些参数的调整在ES算法的收敛速率方面有非常重要的影响。<strong>CMA-ES调整参数的基本思路是，调整参数使得产生好解的概率逐渐增大（沿好的搜索方向进行搜索的概率增大）</strong>。</p>
+        <p>今天看奇葩说，有一道辩题非常有意思，叫做下班后的工作信息我要不要回？双方辩论的非常激烈，各抒己见，其中欧阳超无厘头的梗和席瑞的对工作中权力结构的反思（还有接吻拿手机- -）让我印象颇深。但结辩后，薛教授和刘教授在讨论时将话题引伸到996工作制去类比这一点让我也产生了一些想法，随拿起电脑敲下了一些思考。</p>
+<p>首先薛教授提到了哲学（法学？）中的应然与实然的概念。通俗理解，“应然”指事物应当发展到的样子，按照理性的演绎推理。“实然”指事物实际发生的样子，或者叫客观的对事物的描述。薛教授说完后刘教授拿996工作制来和这道辩题作类比。讲到其实反抗这种工作制或对其不满是人的本性，我们想要更合适于当前社会生产力的上班工作制，比如955。然而这种想法其实是一种“应然”，是合理的。但是落到“实然”的时候，就不得不考虑更多的问题。比如现在的市场机制，如果自己公司不996，但其他公司996，假设相同水平公司每人日工作产出相等，那么996的公司必然产出更多，955公司就活不下去。所以955也只能跟着变成996才有市场竞争力。所以我们没办法去要求公司层面去解决这个问题，因为公司也要活。我们可能更希望有更上层的力量来介入制定一些游戏规则，才能让这种情况出现一些改变。因此也需要一些“信使”去向大家告知这些“应然”。<br>刘教授讲的非常委婉，但确实很实际。尤其是在互联网公司工作的员工，对996应该有挺多的想法，当然我也是，之前最惨的时候每天加班到半夜一点坚持了好多天。不过公司并没有限制要求996，只是大家都不走，你自己也不好走，而且手头的事情也没有处理完。算是吃过996的苦啦。可能局中人确实也过得糊涂，当时还觉得自己工作效率低，自我pua了好一阵，现在看到这个也算是触发了一些思考。</p>
+<p>首先我想先对节目里的观点做出一些延续。目前其实也有很多对于996的控诉（主要是程序员），比如996ICU，pdd事件，还有个人wb上的吐槽等，可以看到其实很多人其实在为这种“应然”做出努力，然而我似乎发现，这些批判的主体都是各大公司。以上面观点来看，其实也许我们施加的压力放错的对象，但是我想说上面的力量也不是那么好处理。首先我应该可以肯定，所有996公司的工作规定都是在劳动法法律限制内的，但为什么还是996呢？其实还是上有对策，下有方案。各公司的法务和公关还有内部的hr团队都会为996做相应的铺垫。就比如说某电商巨头，是可以早下班（按照八小时工作制），但迎接你的可能就是每季度的低绩效，就涉及到个人的工资。因此个人不得不为了这些更加奋斗。当然也主要是上行下效带出的一种风气，不服从管理就低绩效。公司的目标就是利润，这一点没有问题，因此为了追求最大化利润，提高生产力和压缩成本确实是一件合理的事情。如果我是管理者的角度，我也会这样干。所以这点上就单纯的和企业的文化和氛围有关了，从上面角度出发没有什么立场去为这种事情下一条规定。</p>
+<p>除此之外，我们目前还是处于大力发展经济阶段，从上面考虑的话公司之间激烈竞争其实是喜闻乐见的，因为这很明显就是市场经济带来的优势，民营企业主动性非常高，生产力才能快速增长。那就更没有什么去强制的必要。</p>
+<p>因此目前来看，996不仅会存在，而且可能会存在相当长一段时间。因此我不由得又从个人出发，有了一些思考。首先996公司一般给的多，这是比较公认的，但是也不适合长期待，因为除了工作，我也想在生活中寻找一些乐趣。但是年轻时人又有对物质生活有比较高的追求，而且年轻时候也适合去拼一拼，所以这就把问题划分成时间段的问题的，因此目前的初步规划就是先在压力比较大的公司工作一段时间，有一定经验和经济基础后，去更好福利的公司去工作。三四年是一个比较合适的跳槽时间段，因此初步规划就是这样，毕业去压力大的公司待3-5年，跳槽到福利和平台比较好的公司。最后有机会的话去实现自己的个人追求——创业。</p>
 
     </article>
     <!-- license  -->
     
         <div class="license-wrapper">
             <p>原文作者：<a href="https://kairbon.github.io">Karbon</a>
-            <p>原文链接：<a href="https://kairbon.github.io/2019/07/13/CMA-ES-%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4/">https://kairbon.github.io/2019/07/13/CMA-ES-%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4/</a>
-            <p>发表日期：<a href="https://kairbon.github.io/2019/07/13/CMA-ES-%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4/">July 13th 2019, 9:58:26 am</a>
-            <p>更新日期：<a href="https://kairbon.github.io/2019/07/13/CMA-ES-%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4/">August 30th 2020, 11:59:22 am</a>
+            <p>原文链接：<a href="https://kairbon.github.io/2021/01/21/%E4%BB%8E996%E4%B8%AD%E6%80%9D%E8%80%83%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF/">https://kairbon.github.io/2021/01/21/%E4%BB%8E996%E4%B8%AD%E6%80%9D%E8%80%83%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF/</a>
+            <p>发表日期：<a href="https://kairbon.github.io/2021/01/21/%E4%BB%8E996%E4%B8%AD%E6%80%9D%E8%80%83%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF/">January 21st 2021, 10:32:48 pm</a>
+            <p>更新日期：<a href="https://kairbon.github.io/2021/01/21/%E4%BB%8E996%E4%B8%AD%E6%80%9D%E8%80%83%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF/">January 27th 2021, 10:34:19 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -424,17 +422,12 @@ height:50vh;
     <ul class="post-paginator">
         <li class="next">
             
-                <div class="nextSlogan">Next Post</div>
-                <a href= "/2019/07/15/git%E4%BF%9D%E5%AD%98%E7%94%A8%E6%88%B7%E5%90%8D%E5%92%8C%E5%AF%86%E7%A0%81/" title= "git保存用户名和密码">
-                    <div class="nextTitle">git保存用户名和密码</div>
-                </a>
-            
         </li>
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href= "/2019/07/13/%E8%BF%9B%E5%8C%96%E7%AD%96%E7%95%A5%EF%BC%88Evolution-Strategy%EF%BC%89/" title= "进化策略（Evolution Strategy）">
-                    <div class="prevTitle">进化策略（Evolution Strategy）</div>
+                <a href= "/2020/08/30/%E8%87%AA%E5%B7%B1%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%AAflag/" title= "自己的一些个flag">
+                    <div class="prevTitle">自己的一些个flag</div>
                 </a>
             
         </li>
@@ -548,7 +541,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CMA-ES-%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.</span> <span class="toc-text">CMA-ES 算法步骤</span></a></li></ol>
+        
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
