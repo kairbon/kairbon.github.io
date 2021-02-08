@@ -10,18 +10,18 @@
 
 
 
-<head>
+<head><meta name="generator" content="Hexo 3.9.0">
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="author" content="Karbon">
     <meta name="renderer" content="webkit">
     <meta name="copyright" content="Karbon">
     
     <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
     
-    <meta name="description" content="">
+    <meta name="description" content>
     <meta http-equiv="Cache-control" content="no-cache">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Nginx集群conf文件 · Kairbon&#39;Blog</title>
     <style type="text/css">
     @font-face {
@@ -75,10 +75,10 @@
 
 </style>
 
-    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    <link rel="preload" href="/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="/css/mobile.css?v=20180824" media="(max-width: 980px)">
     
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
@@ -187,10 +187,10 @@
 }( typeof global !== "undefined" ? global : this ) );
 </script>
 
-    <link rel="icon" href= "/assets/favicon.ico" />
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
-    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="icon" href="/assets/favicon.ico">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js" as="script">
     <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
     <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
     
@@ -200,7 +200,7 @@
     
     <!-- 谷歌统计  -->
     
-<meta name="generator" content="Hexo 5.1.1"></head>
+</head>
 
     
         <body class="post-body">
@@ -272,7 +272,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">858</span>阅读时长: <span class="post-count reading-time">4 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">852</span>阅读时长: <span class="post-count reading-time">3 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -401,18 +401,18 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">Nginx集群配置文件</span><br><span class="line">worker_processes  <span class="number">1</span>;#工作进程的个数，一般与计算机的cpu核数一致  </span><br><span class="line">  </span><br><span class="line">events &#123;  </span><br><span class="line">    worker_connections  <span class="number">1024</span>;#单个进程最大连接数（最大连接数=连接数*进程数）  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">http &#123;  </span><br><span class="line">    include       mime.types; #文件扩展名与文件类型映射表  </span><br><span class="line">    default_type  application/octet-stream;#默认文件类型  </span><br><span class="line">  </span><br><span class="line">    sendfile        on;#开启高效文件传输模式，sendfile指令指定nginx是否调用sendfile函数来输出文件，对于普通应用设为 on，如果用来进行下载等应用磁盘IO重负载应用，可设置为off，以平衡磁盘与网络I/O处理速度，降低系统的负载。注意：如果图片显示不正常把这个改成off。  </span><br><span class="line">      </span><br><span class="line">    keepalive_timeout  <span class="number">65</span>; #长连接超时时间，单位是秒  </span><br><span class="line">  </span><br><span class="line">    gzip  on;#启用Gizp压缩  </span><br><span class="line">      </span><br><span class="line">    #服务器的集群  </span><br><span class="line">    upstream  tomcat &#123;  #服务器集群名字   </span><br><span class="line">        server    <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">18080</span>  weight=<span class="number">1</span>;#服务器配置   weight是权重的意思，权重越大，分配的概率越大。  </span><br><span class="line">        server    <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">28080</span>  weight=<span class="number">2</span>;  </span><br><span class="line">    &#125;     </span><br><span class="line">  </span><br><span class="line">    #当前的Nginx的配置  </span><br><span class="line">    server &#123;  </span><br><span class="line">        listen       <span class="number">80</span>;#监听<span class="number">80</span>端口，可以改成其他端口  </span><br><span class="line">        server_name  localhost;##############   当前服务的域名  </span><br><span class="line">  </span><br><span class="line">    location / &#123;  </span><br><span class="line">            proxy_pass http://tomcat;  </span><br><span class="line">            proxy_redirect default;  </span><br><span class="line">        &#125;  </span><br><span class="line">          </span><br><span class="line">  </span><br><span class="line">        error_page   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /<span class="number">50</span>x.html;  </span><br><span class="line">        location = /<span class="number">50</span>x.html &#123;  </span><br><span class="line">            root   html;  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+        <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">Nginx集群配置文件</span><br><span class="line">worker_processes  <span class="number">1</span>;#工作进程的个数，一般与计算机的cpu核数一致  </span><br><span class="line">  </span><br><span class="line">events &#123;  </span><br><span class="line">    worker_connections  <span class="number">1024</span>;#单个进程最大连接数（最大连接数=连接数*进程数）  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line">http &#123;  </span><br><span class="line">    include       mime.types; #文件扩展名与文件类型映射表  </span><br><span class="line">    default_type  application/octet-stream;#默认文件类型  </span><br><span class="line">  </span><br><span class="line">    sendfile        on;#开启高效文件传输模式，sendfile指令指定nginx是否调用sendfile函数来输出文件，对于普通应用设为 on，如果用来进行下载等应用磁盘IO重负载应用，可设置为off，以平衡磁盘与网络I/O处理速度，降低系统的负载。注意：如果图片显示不正常把这个改成off。  </span><br><span class="line">      </span><br><span class="line">    keepalive_timeout  <span class="number">65</span>; #长连接超时时间，单位是秒  </span><br><span class="line">  </span><br><span class="line">    gzip  on;#启用Gizp压缩  </span><br><span class="line">      </span><br><span class="line">    #服务器的集群  </span><br><span class="line">    upstream  tomcat &#123;  #服务器集群名字   </span><br><span class="line">        server    <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">18080</span>  weight=<span class="number">1</span>;#服务器配置   weight是权重的意思，权重越大，分配的概率越大。  </span><br><span class="line">        server    <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">28080</span>  weight=<span class="number">2</span>;  </span><br><span class="line">    &#125;     </span><br><span class="line">  </span><br><span class="line">    #当前的Nginx的配置  </span><br><span class="line">    server &#123;  </span><br><span class="line">        listen       <span class="number">80</span>;#监听<span class="number">80</span>端口，可以改成其他端口  </span><br><span class="line">        server_name  localhost;##############   当前服务的域名  </span><br><span class="line">  </span><br><span class="line">    location / &#123;  </span><br><span class="line">            proxy_pass http://tomcat;  </span><br><span class="line">            proxy_redirect default;  </span><br><span class="line">        &#125;  </span><br><span class="line">          </span><br><span class="line">  </span><br><span class="line">        error_page   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /<span class="number">50</span>x.html;  </span><br><span class="line">        location = /<span class="number">50</span>x.html &#123;  </span><br><span class="line">            root   html;  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"># 定义Nginx运行的用户 和 用户组 如果对应服务器暴露在外面的话建议使用权限较小的用户 防止被入侵</span><br><span class="line"># user www www;</span><br><span class="line"></span><br><span class="line">#Nginx进程数, 建议设置为等于CPU总核心数</span><br><span class="line">worker_processes <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">#开启全局错误日志类型</span><br><span class="line">error_log /var/<span class="built_in">log</span>/nginx/<span class="built_in">error</span>.<span class="built_in">log</span> info;</span><br><span class="line"></span><br><span class="line">#进程文件</span><br><span class="line">pid /var/run/nginx.pid;</span><br><span class="line"></span><br><span class="line">#一个Nginx进程打开的最多文件描述数目 建议与ulimit -n一致</span><br><span class="line">#如果面对高并发时 注意修改该值 ulimit -n 还有部分系统参数 而并非这个单独确定</span><br><span class="line">worker_rlimit_nofile <span class="number">65535</span>;</span><br><span class="line"></span><br><span class="line">events&#123;</span><br><span class="line">    #使用epoll模型提高性能</span><br><span class="line">    use epoll;</span><br><span class="line">    #单个进程最大连接数</span><br><span class="line">    worker_connections <span class="number">65535</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http&#123;</span><br><span class="line">    #扩展名与文件类型映射表</span><br><span class="line">    include mime.types;</span><br><span class="line">    #默认类型</span><br><span class="line">    default_type application/octet-stream;</span><br><span class="line">    sendfile on;</span><br><span class="line">    tcp_nopush on;</span><br><span class="line">    tcp_nodelay on;</span><br><span class="line">    keepalive_timeout <span class="number">65</span>;</span><br><span class="line">    types_hash_max_size <span class="number">2048</span>;</span><br><span class="line">    #日志</span><br><span class="line">    access_log /var/<span class="built_in">log</span>/nginx/access.<span class="built_in">log</span>;</span><br><span class="line">    error_log /var/<span class="built_in">log</span>/nginx/<span class="built_in">error</span>.<span class="built_in">log</span>;</span><br><span class="line">    #gzip 压缩传输</span><br><span class="line">    gzip on;</span><br><span class="line">    gzip_min_length <span class="number">1</span>k;  #最小<span class="number">1</span>K</span><br><span class="line">    gzip_buffers <span class="number">16</span> <span class="number">64</span>K;</span><br><span class="line">    gzip_http_version <span class="number">1.1</span>;</span><br><span class="line">    gzip_comp_level <span class="number">6</span>;</span><br><span class="line">    gzip_types text/plain application/x-javascript text/css application/xml application/javascript;</span><br><span class="line">    gzip_vary on;</span><br><span class="line">    #负载均衡组</span><br><span class="line">    #静态服务器组</span><br><span class="line">    upstream static.zh-jieli.com &#123;</span><br><span class="line">        server <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">808</span> weight=<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    #动态服务器组</span><br><span class="line">    upstream zh-jieli.com &#123;</span><br><span class="line">        server <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">8080</span>;</span><br><span class="line">        #server <span class="number">192.168</span><span class="number">.8</span><span class="number">.203</span>:<span class="number">8080</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    #配置代理参数</span><br><span class="line">    proxy_redirect off;</span><br><span class="line">    proxy_set_header Host $host;</span><br><span class="line">    proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    client_max_body_size <span class="number">10</span>m;</span><br><span class="line">    client_body_buffer_size <span class="number">128</span>k;</span><br><span class="line">    proxy_connect_timeout <span class="number">65</span>;</span><br><span class="line">    proxy_send_timeout <span class="number">65</span>;</span><br><span class="line">    proxy_read_timeout <span class="number">65</span>;</span><br><span class="line">    proxy_buffer_size <span class="number">4</span>k;</span><br><span class="line">    proxy_buffers <span class="number">4</span> <span class="number">32</span>k;</span><br><span class="line">    proxy_busy_buffers_size <span class="number">64</span>k;</span><br><span class="line">    #缓存配置</span><br><span class="line">    proxy_cache_key <span class="string">&#x27;$host:$server_port$request_uri&#x27;</span>;</span><br><span class="line">    proxy_temp_file_write_size <span class="number">64</span>k;</span><br><span class="line">    proxy_temp_path /dev/shm/JieLiERP/proxy_temp_path;</span><br><span class="line">    proxy_cache_path /dev/shm/JieLiERP/proxy_cache_path levels=<span class="number">1</span>:<span class="number">2</span> keys_zone=cache_one:<span class="number">200</span>m inactive=<span class="number">5</span>d max_size=<span class="number">1</span>g;</span><br><span class="line">    proxy_ignore_headers X-Accel-Expires Expires Cache-Control Set-Cookie;</span><br><span class="line"></span><br><span class="line">    server&#123;</span><br><span class="line">        listen <span class="number">80</span>;</span><br><span class="line">        server_name erp.zh-jieli.com;</span><br><span class="line">        location / &#123;</span><br><span class="line">            index index; #默认主页为 /index</span><br><span class="line">            #proxy_pass http://jieli;</span><br><span class="line">        &#125;</span><br><span class="line">        location ~ .*\.(js|css|ico|png|jpg|eot|svg|ttf|woff) &#123;</span><br><span class="line">            proxy_cache cache_one;</span><br><span class="line">            proxy_cache_valid <span class="number">200</span> <span class="number">304</span> <span class="number">302</span> <span class="number">5</span>d;</span><br><span class="line">            proxy_cache_valid any <span class="number">5</span>d;</span><br><span class="line">            proxy_cache_key <span class="string">&#x27;$host:$server_port$request_uri&#x27;</span>;</span><br><span class="line">            add_header X-Cache <span class="string">&#x27;$upstream_cache_status from $host&#x27;</span>;</span><br><span class="line">            proxy_pass http://static.zh-jieli.com;</span><br><span class="line">            #所有静态文件直接读取硬盘</span><br><span class="line">            #           root /var/lib/tomcat7/webapps/JieLiERP/WEB-INF ;</span><br><span class="line">            expires <span class="number">30</span>d; #缓存<span class="number">30</span>天</span><br><span class="line">        &#125;</span><br><span class="line">        #其他页面反向代理到tomcat容器</span><br><span class="line">        location ~ .*$ &#123;</span><br><span class="line">            index index;</span><br><span class="line">            proxy_pass http://zh-jieli.com;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    server&#123;</span><br><span class="line">        listen <span class="number">808</span>;</span><br><span class="line">        server_name static;</span><br><span class="line">        location / &#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        location ~ .*\.(js|css|ico|png|jpg|eot|svg|ttf|woff) &#123;</span><br><span class="line">            #所有静态文件直接读取硬盘</span><br><span class="line">            root /var/lib/tomcat7/webapps/JieLiERP/WEB-INF ;</span><br><span class="line">            expires <span class="number">30</span>d; #缓存<span class="number">30</span>天</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"># 定义Nginx运行的用户 和 用户组 如果对应服务器暴露在外面的话建议使用权限较小的用户 防止被入侵</span><br><span class="line"># user www www;</span><br><span class="line"></span><br><span class="line">#Nginx进程数, 建议设置为等于CPU总核心数</span><br><span class="line">worker_processes <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">#开启全局错误日志类型</span><br><span class="line">error_log /var/<span class="built_in">log</span>/nginx/<span class="built_in">error</span>.<span class="built_in">log</span> info;</span><br><span class="line"></span><br><span class="line">#进程文件</span><br><span class="line">pid /var/run/nginx.pid;</span><br><span class="line"></span><br><span class="line">#一个Nginx进程打开的最多文件描述数目 建议与ulimit -n一致</span><br><span class="line">#如果面对高并发时 注意修改该值 ulimit -n 还有部分系统参数 而并非这个单独确定</span><br><span class="line">worker_rlimit_nofile <span class="number">65535</span>;</span><br><span class="line"></span><br><span class="line">events&#123;</span><br><span class="line">    #使用epoll模型提高性能</span><br><span class="line">    use epoll;</span><br><span class="line">    #单个进程最大连接数</span><br><span class="line">    worker_connections <span class="number">65535</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http&#123;</span><br><span class="line">    #扩展名与文件类型映射表</span><br><span class="line">    include mime.types;</span><br><span class="line">    #默认类型</span><br><span class="line">    default_type application/octet-stream;</span><br><span class="line">    sendfile on;</span><br><span class="line">    tcp_nopush on;</span><br><span class="line">    tcp_nodelay on;</span><br><span class="line">    keepalive_timeout <span class="number">65</span>;</span><br><span class="line">    types_hash_max_size <span class="number">2048</span>;</span><br><span class="line">    #日志</span><br><span class="line">    access_log /var/<span class="built_in">log</span>/nginx/access.<span class="built_in">log</span>;</span><br><span class="line">    error_log /var/<span class="built_in">log</span>/nginx/<span class="built_in">error</span>.<span class="built_in">log</span>;</span><br><span class="line">    #gzip 压缩传输</span><br><span class="line">    gzip on;</span><br><span class="line">    gzip_min_length <span class="number">1</span>k;  #最小<span class="number">1</span>K</span><br><span class="line">    gzip_buffers <span class="number">16</span> <span class="number">64</span>K;</span><br><span class="line">    gzip_http_version <span class="number">1.1</span>;</span><br><span class="line">    gzip_comp_level <span class="number">6</span>;</span><br><span class="line">    gzip_types text/plain application/x-javascript text/css application/xml application/javascript;</span><br><span class="line">    gzip_vary on;</span><br><span class="line">    #负载均衡组</span><br><span class="line">    #静态服务器组</span><br><span class="line">    upstream static.zh-jieli.com &#123;</span><br><span class="line">        server <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">808</span> weight=<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    #动态服务器组</span><br><span class="line">    upstream zh-jieli.com &#123;</span><br><span class="line">        server <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">8080</span>;</span><br><span class="line">        #server <span class="number">192.168</span><span class="number">.8</span><span class="number">.203</span>:<span class="number">8080</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    #配置代理参数</span><br><span class="line">    proxy_redirect off;</span><br><span class="line">    proxy_set_header Host $host;</span><br><span class="line">    proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    client_max_body_size <span class="number">10</span>m;</span><br><span class="line">    client_body_buffer_size <span class="number">128</span>k;</span><br><span class="line">    proxy_connect_timeout <span class="number">65</span>;</span><br><span class="line">    proxy_send_timeout <span class="number">65</span>;</span><br><span class="line">    proxy_read_timeout <span class="number">65</span>;</span><br><span class="line">    proxy_buffer_size <span class="number">4</span>k;</span><br><span class="line">    proxy_buffers <span class="number">4</span> <span class="number">32</span>k;</span><br><span class="line">    proxy_busy_buffers_size <span class="number">64</span>k;</span><br><span class="line">    #缓存配置</span><br><span class="line">    proxy_cache_key <span class="string">'$host:$server_port$request_uri'</span>;</span><br><span class="line">    proxy_temp_file_write_size <span class="number">64</span>k;</span><br><span class="line">    proxy_temp_path /dev/shm/JieLiERP/proxy_temp_path;</span><br><span class="line">    proxy_cache_path /dev/shm/JieLiERP/proxy_cache_path levels=<span class="number">1</span>:<span class="number">2</span> keys_zone=cache_one:<span class="number">200</span>m inactive=<span class="number">5</span>d max_size=<span class="number">1</span>g;</span><br><span class="line">    proxy_ignore_headers X-Accel-Expires Expires Cache-Control Set-Cookie;</span><br><span class="line"></span><br><span class="line">    server&#123;</span><br><span class="line">        listen <span class="number">80</span>;</span><br><span class="line">        server_name erp.zh-jieli.com;</span><br><span class="line">        location / &#123;</span><br><span class="line">            index index; #默认主页为 /index</span><br><span class="line">            #proxy_pass http://jieli;</span><br><span class="line">        &#125;</span><br><span class="line">        location ~ .*\.(js|css|ico|png|jpg|eot|svg|ttf|woff) &#123;</span><br><span class="line">            proxy_cache cache_one;</span><br><span class="line">            proxy_cache_valid <span class="number">200</span> <span class="number">304</span> <span class="number">302</span> <span class="number">5</span>d;</span><br><span class="line">            proxy_cache_valid any <span class="number">5</span>d;</span><br><span class="line">            proxy_cache_key <span class="string">'$host:$server_port$request_uri'</span>;</span><br><span class="line">            add_header X-Cache <span class="string">'$upstream_cache_status from $host'</span>;</span><br><span class="line">            proxy_pass http://static.zh-jieli.com;</span><br><span class="line">            #所有静态文件直接读取硬盘</span><br><span class="line">            #           root /var/lib/tomcat7/webapps/JieLiERP/WEB-INF ;</span><br><span class="line">            expires <span class="number">30</span>d; #缓存<span class="number">30</span>天</span><br><span class="line">        &#125;</span><br><span class="line">        #其他页面反向代理到tomcat容器</span><br><span class="line">        location ~ .*$ &#123;</span><br><span class="line">            index index;</span><br><span class="line">            proxy_pass http://zh-jieli.com;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    server&#123;</span><br><span class="line">        listen <span class="number">808</span>;</span><br><span class="line">        server_name static;</span><br><span class="line">        location / &#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        location ~ .*\.(js|css|ico|png|jpg|eot|svg|ttf|woff) &#123;</span><br><span class="line">            #所有静态文件直接读取硬盘</span><br><span class="line">            root /var/lib/tomcat7/webapps/JieLiERP/WEB-INF ;</span><br><span class="line">            expires <span class="number">30</span>d; #缓存<span class="number">30</span>天</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
     </article>
     <!-- license  -->
     
         <div class="license-wrapper">
             <p>原文作者：<a href="https://kairbon.github.io">Karbon</a>
-            <p>原文链接：<a href="https://kairbon.github.io/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/">https://kairbon.github.io/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/</a>
-            <p>发表日期：<a href="https://kairbon.github.io/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/">July 13th 2019, 9:48:40 am</a>
-            <p>更新日期：<a href="https://kairbon.github.io/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/">August 30th 2020, 11:59:22 am</a>
-            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+            <p>原文链接：<a href="https://kairbon.github.io/2019/07/13/Nginx集群conf文件/">https://kairbon.github.io/2019/07/13/Nginx集群conf文件/</a>
+            <p>发表日期：<a href="https://kairbon.github.io/2019/07/13/Nginx集群conf文件/">July 13th 2019, 9:48:40 am</a>
+            <p>更新日期：<a href="https://kairbon.github.io/2019/07/13/Nginx集群conf文件/">August 30th 2020, 11:59:22 am</a>
+            <p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
     <!-- paginator  -->
@@ -420,7 +420,7 @@ height:50vh;
         <li class="next">
             
                 <div class="nextSlogan">Next Post</div>
-                <a href= "/2019/07/13/%E4%BC%98%E5%8C%96%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%8A%A8%E4%BD%9C%E7%9A%84CMA-ES%E7%AE%97%E6%B3%95-python%E7%89%88%E6%9C%AC%E7%9A%84api%E5%88%86%E6%9E%90/" title= "优化机器人动作的CMA-ES算法 python版本的api分析">
+                <a href= "/2019/07/13/优化机器人动作的CMA-ES算法-python版本的api分析/" title= "优化机器人动作的CMA-ES算法 python版本的api分析">
                     <div class="nextTitle">优化机器人动作的CMA-ES算法 python版本的api分析</div>
                 </a>
             
@@ -428,7 +428,7 @@ height:50vh;
         <li class="previous">
             
                 <div class="prevSlogan">Previous Post</div>
-                <a href= "/2019/07/10/%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AAAPP/" title= "如何开发一个APP">
+                <a href= "/2019/07/10/如何开发一个APP/" title= "如何开发一个APP">
                     <div class="prevTitle">如何开发一个APP</div>
                 </a>
             
@@ -747,10 +747,6 @@ top:50vh;
     
     
     
-    
-    
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 17
@@ -769,12 +765,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">02/08</span><a class="archive-post-title" href= "/2021/02/08/RocketMQ%E8%87%AA%E5%AD%A6/" >RocketMQ自学（对比kafka）---旧文章搬运</a>
+            <span class="archive-post-date">02/08</span><a class="archive-post-title" href= "/2021/02/08/RocketMQ自学/" >RocketMQ自学（对比kafka）---旧文章搬运</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2021/01/21/%E4%BB%8E996%E4%B8%AD%E6%80%9D%E8%80%83%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF/" >从996中思考的一些东西</a>
+            <span class="archive-post-date">01/21</span><a class="archive-post-title" href= "/2021/01/21/从996中思考的一些东西/" >从996中思考的一些东西</a>
         </li>
     
     
@@ -788,12 +784,12 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">08/30</span><a class="archive-post-title" href= "/2020/08/30/%E8%87%AA%E5%B7%B1%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%AAflag/" >自己的一些个flag</a>
+            <span class="archive-post-date">08/30</span><a class="archive-post-title" href= "/2020/08/30/自己的一些个flag/" >自己的一些个flag</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">01/13</span><a class="archive-post-title" href= "/2020/01/13/The-Case-Against-Quantum-Computing%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/" >The Case Against Quantum Computing阅读报告</a>
+            <span class="archive-post-date">01/13</span><a class="archive-post-title" href= "/2020/01/13/The-Case-Against-Quantum-Computing阅读报告/" >The Case Against Quantum Computing阅读报告</a>
         </li>
     
     
@@ -807,67 +803,67 @@ top:50vh;
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/19</span><a class="archive-post-title" href= "/2019/12/19/Dst-Server%E5%AE%9E%E7%8E%B0WorkerPool%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7/" >Dst-Server实现WorkerPool的必要性思考</a>
+            <span class="archive-post-date">12/19</span><a class="archive-post-title" href= "/2019/12/19/Dst-Server实现WorkerPool的必要性/" >Dst-Server实现WorkerPool的必要性思考</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/23</span><a class="archive-post-title" href= "/2019/07/23/%E5%B8%B8%E7%94%A8%E5%B8%B8%E5%BF%98%E7%9A%84git%E5%91%BD%E4%BB%A4/" >常用常忘的git命令</a>
+            <span class="archive-post-date">07/23</span><a class="archive-post-title" href= "/2019/07/23/常用常忘的git命令/" >常用常忘的git命令</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/20</span><a class="archive-post-title" href= "/2019/07/20/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91MongoDB%EF%BC%88Windows%EF%BC%89/" >如何编译MongoDB（Windows）</a>
+            <span class="archive-post-date">07/20</span><a class="archive-post-title" href= "/2019/07/20/如何编译MongoDB（Windows）/" >如何编译MongoDB（Windows）</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/18</span><a class="archive-post-title" href= "/2019/07/18/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%90%8Etomcat%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96%E8%AF%B7%E6%B1%82%E7%9A%84%E7%9C%9F%E5%AE%9EIP%E5%9C%B0%E5%9D%80/" >nginx反向代理后tomcat如何获取请求的真实IP地址</a>
+            <span class="archive-post-date">07/18</span><a class="archive-post-title" href= "/2019/07/18/nginx反向代理后tomcat如何获取请求的真实IP地址/" >nginx反向代理后tomcat如何获取请求的真实IP地址</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/18</span><a class="archive-post-title" href= "/2019/07/18/%E5%BC%BA%E5%88%B6%E8%A6%86%E7%9B%96%E5%88%AB%E4%BA%BA%E7%9A%84%E5%88%86%E6%94%AF%E8%BF%9C%E7%A8%8B/" >强制覆盖别人的分支远程</a>
+            <span class="archive-post-date">07/18</span><a class="archive-post-title" href= "/2019/07/18/强制覆盖别人的分支远程/" >强制覆盖别人的分支远程</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2019/07/15/git%E4%BF%9D%E5%AD%98%E7%94%A8%E6%88%B7%E5%90%8D%E5%92%8C%E5%AF%86%E7%A0%81/" >git保存用户名和密码</a>
+            <span class="archive-post-date">07/15</span><a class="archive-post-title" href= "/2019/07/15/git保存用户名和密码/" >git保存用户名和密码</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/CMA-ES-%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4/" >CMA-ES 算法步骤</a>
+            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/CMA-ES-算法步骤/" >CMA-ES 算法步骤</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/GA-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95-%E6%A6%82%E5%BF%B5%E7%90%86%E8%A7%A3/" >GA(遗传算法)概念理解</a>
+            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/GA-遗传算法-概念理解/" >GA(遗传算法)概念理解</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/" >Nginx集群conf文件</a>
+            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/Nginx集群conf文件/" >Nginx集群conf文件</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/robocup3D-%E5%A6%82%E4%BD%95%E5%B0%86%E5%8F%82%E6%95%B0%E6%96%87%E4%BB%B6%E6%89%93%E5%8C%85%E4%B8%BA%E5%8A%A8%E6%80%81%E5%BA%93/" >robocup3D 如何将参数文件打包为动态库</a>
+            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/robocup3D-如何将参数文件打包为动态库/" >robocup3D 如何将参数文件打包为动态库</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/%E4%BC%98%E5%8C%96%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%8A%A8%E4%BD%9C%E7%9A%84CMA-ES%E7%AE%97%E6%B3%95-python%E7%89%88%E6%9C%AC%E7%9A%84api%E5%88%86%E6%9E%90/" >优化机器人动作的CMA-ES算法 python版本的api分析</a>
+            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/优化机器人动作的CMA-ES算法-python版本的api分析/" >优化机器人动作的CMA-ES算法 python版本的api分析</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/%E8%BF%9B%E5%8C%96%E7%AD%96%E7%95%A5%EF%BC%88Evolution-Strategy%EF%BC%89/" >进化策略（Evolution Strategy）</a>
+            <span class="archive-post-date">07/13</span><a class="archive-post-title" href= "/2019/07/13/进化策略（Evolution-Strategy）/" >进化策略（Evolution Strategy）</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">07/10</span><a class="archive-post-title" href= "/2019/07/10/%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AAAPP/" >如何开发一个APP</a>
+            <span class="archive-post-date">07/10</span><a class="archive-post-title" href= "/2019/07/10/如何开发一个APP/" >如何开发一个APP</a>
         </li>
     
     </div>
@@ -879,19 +875,19 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="分布式系统"><span class="iconfont-archer">&#xe606;</span>分布式系统</span>
     
+        <span class="sidebar-tag-name" data-tags="软将工程"><span class="iconfont-archer">&#xe606;</span>软将工程</span>
+    
         <span class="sidebar-tag-name" data-tags="初学者"><span class="iconfont-archer">&#xe606;</span>初学者</span>
+    
+        <span class="sidebar-tag-name" data-tags="量子计算"><span class="iconfont-archer">&#xe606;</span>量子计算</span>
     
         <span class="sidebar-tag-name" data-tags="git"><span class="iconfont-archer">&#xe606;</span>git</span>
     
         <span class="sidebar-tag-name" data-tags="软件工程"><span class="iconfont-archer">&#xe606;</span>软件工程</span>
     
-        <span class="sidebar-tag-name" data-tags="数据库 源码"><span class="iconfont-archer">&#xe606;</span>数据库 源码</span>
-    
         <span class="sidebar-tag-name" data-tags="这就是生活"><span class="iconfont-archer">&#xe606;</span>这就是生活</span>
     
-        <span class="sidebar-tag-name" data-tags="量子计算"><span class="iconfont-archer">&#xe606;</span>量子计算</span>
-    
-        <span class="sidebar-tag-name" data-tags="软将工程"><span class="iconfont-archer">&#xe606;</span>软将工程</span>
+        <span class="sidebar-tag-name" data-tags="数据库 源码"><span class="iconfont-archer">&#xe606;</span>数据库 源码</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
