@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://kairbon.github.io/"/>
-  <updated>2021-02-08T04:20:54.972Z</updated>
+  <updated>2021-03-14T03:46:46.178Z</updated>
   <id>https://kairbon.github.io/</id>
   
   <author>
@@ -17,11 +17,34 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>分布式事务-2pc,3pc</title>
+    <link href="https://kairbon.github.io/2021/03/14/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-2pc-3pc/"/>
+    <id>https://kairbon.github.io/2021/03/14/分布式事务-2pc-3pc/</id>
+    <published>2021-03-14T03:09:56.000Z</published>
+    <updated>2021-03-14T03:46:46.178Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="分布式事务-2pc-3pc"><a href="#分布式事务-2pc-3pc" class="headerlink" title="分布式事务-2pc,3pc"></a>分布式事务-2pc,3pc</h2><p>原作者 <a href="https://www.cnblogs.com/qdhxhz/p/11167025.html" target="_blank" rel="noopener">https://www.cnblogs.com/qdhxhz/p/11167025.html</a></p><h3 id="1-2pc-two-phase-commit"><a href="#1-2pc-two-phase-commit" class="headerlink" title="1. 2pc(two phase commit)"></a>1. 2pc(two phase commit)</h3><p>两阶段提交又称2PC,2PC是一个非常经典的强一致、中心化的原子提交协议。</p><p>这里所说的中心化是指协议中有两类节点：一个是中心化协调者节点（coordinator）和N个参与者节点（partcipant）。<br>两个阶段：第一阶段：投票阶段 和第二阶段：提交/执行阶段。<br>举例 订单服务A，需要调用 支付服务B 去支付，支付成功则处理购物订单为待发货状态，否则就需要将购物订单处理为失败状态。</p><p>那么看2PC阶段是如何处理的</p><h4 id="1-1-第一阶段"><a href="#1-1-第一阶段" class="headerlink" title="1.1 第一阶段"></a>1.1 第一阶段</h4><p><img src="/images/pasted-9.png" alt="upload successful"><br>第一阶段主要分为3步</p><p>(1) 事务询问</p><p>协调者 向所有的 参与者 发送事务预处理请求，称之为Prepare，并开始等待各 参与者 的响应。</p><p>(2) 执行本地事务</p><p>各个 参与者 节点执行本地事务操作,但在执行完成后并不会真正提交数据库本地事务，而是先向 协调者 报告说：“我这边可以处理了/我这边不能处理”。.</p><p>(3) 各参与者向协调者反馈事务询问的响应</p><p>如果 参与者 成功执行了事务操作,那么就反馈给协调者 Yes 响应,表示事务可以执行,如果没有 参与者 成功执行事务,那么就反馈给协调者 No 响应,表示事务不可以执行。</p><p>第一阶段执行完后，会有两种可能。1、所有都返回Yes. 2、有一个或者多个返回No。</p><h4 id="1-2-第二阶段"><a href="#1-2-第二阶段" class="headerlink" title="1.2 第二阶段"></a>1.2 第二阶段</h4><p>第二阶段：提交/执行阶段（成功流程）成功条件：所有参与者都返回Yes。</p><p><img src="/images/pasted-10.png" alt="upload successful"><br>第二阶段主要分为两步</p><p>​ 1)所有的参与者反馈给协调者的信息都是Yes,那么就会执行事务提交</p><p>​ 协调者 向 所有参与者 节点发出Commit请求.</p><p>​ 2)事务提交</p><p>​ 参与者 收到Commit请求之后,就会正式执行本地事务Commit操作,并在完成提交之后释放整个事务执行期间占用的事务资源。</p><h4 id="1-3-第二阶段：提交-执行阶段（异常流程）"><a href="#1-3-第二阶段：提交-执行阶段（异常流程）" class="headerlink" title="1.3 第二阶段：提交/执行阶段（异常流程）"></a>1.3 第二阶段：提交/执行阶段（异常流程）</h4><p>异常条件：任何一个 参与者 向 协调者 反馈了 No 响应,或者等待超时之后,协调者尚未收到所有参与者的反馈响应。</p><p><img src="/images/pasted-11.png" alt="upload successful"></p><p>异常流程第二阶段也分为两步</p><p>1)发送回滚请求</p><p>​ 协调者 向所有参与者节点发出 RoollBack 请求.</p><p>​ 2)事务回滚</p><p>​ 参与者 接收到RoollBack请求后,会回滚本地事务。</p><h4 id="1-4-2PC缺点"><a href="#1-4-2PC缺点" class="headerlink" title="1.4 2PC缺点"></a>1.4 2PC缺点</h4><p>通过上面的演示，很容易想到2pc所带来的缺陷</p><p>1）性能问题</p><p>无论是在第一阶段的过程中,还是在第二阶段,所有的参与者资源和协调者资源都是被锁住的,只有当所有节点准备完毕，事务 协调者 才会通知进行全局提交，</p><p>参与者 进行本地事务提交后才会释放资源。这样的过程会比较漫长，对性能影响比较大。</p><p>2）单节点故障</p><p>由于协调者的重要性，一旦 协调者 发生故障。参与者 会一直阻塞下去。尤其在第二阶段，协调者 发生故障，那么所有的 参与者 还都处于</p><p>锁定事务资源的状态中，而无法继续完成事务操作。（虽然协调者挂掉，可以重新选举一个协调者，但是无法解决因为协调者宕机导致的参与者处于阻塞状态的问题）</p><p>2PC出现单点问题的三种情况</p><p>(1)协调者正常,参与者宕机</p><p>​ 由于 协调者 无法收集到所有 参与者 的反馈，会陷入阻塞情况。</p><p>​ 解决方案:引入超时机制,如果协调者在超过指定的时间还没有收到参与者的反馈,事务就失败,向所有节点发送终止事务请求。</p><p>(2)协调者宕机,参与者正常</p><p>​ 无论处于哪个阶段，由于协调者宕机，无法发送提交请求，所有处于执行了操作但是未提交状态的参与者都会陷入阻塞情况.</p><p>​ 解决方案:引入协调者备份,同时协调者需记录操作日志.当检测到协调者宕机一段时间后，协调者备份取代协调者，并读取操作日志，向所有参与者询问状态。</p><p>(3)协调者和参与者都宕机</p><p>发生在第一阶段： 因为第一阶段，所有参与者都没有真正执行commit，所以只需重新在剩余的参与者中重新选出一个协调者，新的协调者在重新执行第一阶段和第二阶段就可以了。<br>2)发生在第二阶段 并且 挂了的参与者在挂掉之前没有收到协调者的指令。也就是上面的第4步挂了，这是可能协调者还没有发送第4步就挂了。这种情形下，新的协调者重新执行第一阶段和第二阶段操作。</p><p>3)发生在第二阶段 并且 有部分参与者已经执行完commit操作。就好比这里订单服务A和支付服务B都收到协调者 发送的commit信息，开始真正执行本地事务commit,但突发情况，Acommit成功，B确挂了。这个时候目前来讲数据是不一致的。虽然这个时候可以再通过手段让他和协调者通信，再想办法把数据搞成一致的，但是，这段时间内他的数据状态已经是不一致的了！ 2PC 无法解决这个问题。</p><h3 id="2-三阶段提交-3PC"><a href="#2-三阶段提交-3PC" class="headerlink" title="2. 三阶段提交(3PC)"></a>2. 三阶段提交(3PC)</h3><p>三阶段提交协议（3PC）主要是为了解决两阶段提交协议的阻塞问题，2pc存在的问题是当协作者崩溃时，参与者不能做出最后的选择。因此参与者可能在协作者恢复之前保持阻塞。三阶段提交（Three-phase commit），是二阶段提交（2PC）的改进版本。</p><p>与两阶段提交不同的是，三阶段提交有两个改动点。</p><p>1、 引入超时机制。同时在协调者和参与者中都引入超时机制。<br>2、在第一阶段和第二阶段中插入一个准备阶段。保证了在最后提交阶段之前各参与节点的状态是一致的。<br>也就是说，除了引入超时机制之外，3PC把2PC的准备阶段再次一分为二，这样三阶段提交就有CanCommit、PreCommit、DoCommit三个阶段。</p><h4 id="2-1-CanCommit阶段"><a href="#2-1-CanCommit阶段" class="headerlink" title="2.1 CanCommit阶段"></a>2.1 CanCommit阶段</h4><p>之前2PC的一阶段是本地事务执行结束后，最后不Commit,等其它服务都执行结束并返回Yes，由协调者发生commit才真正执行commit。而这里的CanCommit指的是 尝试获取数据库锁 如果可以，就返回Yes。</p><p>这阶段主要分为2步</p><p>事务询问 协调者 向 参与者 发送CanCommit请求。询问是否可以执行事务提交操作。然后开始等待 参与者 的响应。<br>响应反馈 参与者 接到CanCommit请求之后，正常情况下，如果其自身认为可以顺利执行事务，则返回Yes响应，并进入预备状态。否则反馈No</p><h4 id="2-2-PreCommit阶段"><a href="#2-2-PreCommit阶段" class="headerlink" title="2.2 PreCommit阶段"></a>2.2 PreCommit阶段</h4><p>在阶段一中，如果所有的参与者都返回Yes的话，那么就会进入PreCommit阶段进行事务预提交。这里的PreCommit阶段 跟上面的第一阶段是差不多的，只不过这里 协调者和参与者都引入了超时机制 （2PC中只有协调者可以超时，参与者没有超时机制）。</p><h4 id="2-3-DoCommit阶段"><a href="#2-3-DoCommit阶段" class="headerlink" title="2.3 DoCommit阶段"></a>2.3 DoCommit阶段</h4><p>这里跟2pc的阶段二是差不多的。</p><h4 id="2-4-总结"><a href="#2-4-总结" class="headerlink" title="2.4 总结"></a>2.4 总结</h4><p>相比较2PC而言，3PC对于协调者（Coordinator）和参与者（Partcipant）都设置了超时时间，而2PC只有协调者才拥有超时机制。这解决了一个什么问题呢？</p><p>这个优化点，主要是避免了参与者在长时间无法与协调者节点通讯（协调者挂掉了）的情况下，无法释放资源的问题，因为参与者自身拥有超时机制会在超时后，</p><p>自动进行本地commit从而进行释放资源。而这种机制也侧面降低了整个事务的阻塞时间和范围。</p><p>另外，通过CanCommit、PreCommit、DoCommit三个阶段的设计，相较于2PC而言，多设置了一个缓冲阶段保证了在最后提交阶段之前各参与节点的状态是一致的。</p><p>以上就是3PC相对于2PC的一个提高（相对缓解了2PC中的前两个问题），但是3PC依然没有完全解决数据不一致的问题。</p><p>参考<br>1、分布式事务：深入理解什么是2PC、3PC</p><p>2、分布式事务、3pc</p><p>3、对分布式事务及两阶段提交、三阶段提交的理解</p><p>4、分布式理论基础：2PC和3PC</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;分布式事务-2pc-3pc&quot;&gt;&lt;a href=&quot;#分布式事务-2pc-3pc&quot; class=&quot;headerlink&quot; title=&quot;分布式事务-2pc,3pc&quot;&gt;&lt;/a&gt;分布式事务-2pc,3pc&lt;/h2&gt;&lt;p&gt;原作者 &lt;a href=&quot;https://www.c
+      
+    
+    </summary>
+    
+    
+      <category term="分布式系统" scheme="https://kairbon.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
+  
+  <entry>
     <title>RocketMQ自学（对比kafka）---旧文章搬运</title>
     <link href="https://kairbon.github.io/2021/02/08/RocketMQ%E8%87%AA%E5%AD%A6/"/>
     <id>https://kairbon.github.io/2021/02/08/RocketMQ自学/</id>
     <published>2021-02-08T04:19:20.000Z</published>
-    <updated>2021-02-08T04:20:54.972Z</updated>
+    <updated>2021-03-14T03:41:07.422Z</updated>
     
     <content type="html"><![CDATA[<h1 id="RocketMQ自学（对比kafka）—旧文章搬运"><a href="#RocketMQ自学（对比kafka）—旧文章搬运" class="headerlink" title="RocketMQ自学（对比kafka）—旧文章搬运"></a>RocketMQ自学（对比kafka）—旧文章搬运</h1><p><a name="Sda4S"></a></p><h2 id="1-MQ"><a href="#1-MQ" class="headerlink" title="1. MQ"></a>1. MQ</h2><p>消息队列是解耦高并发系统所需要的一种组件（通常为分布式）。分布式保证自身的可用性，从而使得维护的时候可以专心，编写代码可以各司其职，提高整个系统的可靠性和吞吐量。<br><a name="ZT5qH"></a></p><h2 id="2-RocketMQ"><a href="#2-RocketMQ" class="headerlink" title="2. RocketMQ"></a>2. RocketMQ</h2><p><a name="uizTv"></a></p><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>RocketMQ是阿里巴巴开源，apache旗下的一个MQ，他的可选模式多种多样，适合各种场景去使用。<br><a name="yyjxx"></a></p><h3 id="分布式架构"><a href="#分布式架构" class="headerlink" title="分布式架构"></a>分布式架构</h3><p><a name="UuHfR"></a></p><h4 id="RocketMQ分布式架构"><a href="#RocketMQ分布式架构" class="headerlink" title="RocketMQ分布式架构"></a>RocketMQ分布式架构</h4><p>RocketMQ的分布式架构挺有特点的，抛开nameserver，最关键的就是在broker的配置上,主要分为以下几种模式：</p><ol><li>单master，只有一个broker节点，可用性最低，且容易导致整个系统宕机。</li><li>多master，一个集群全为master，问题：当一台master挂掉时，在其上的信息队列会不可用。注意：写入磁盘的时候宕机可能会有丢失数据的风险。</li><li>多master多salve模式，每个master配置一个salve，做主从同步。但主从同步也有异步同步和同步同步的区别，要根据不同的场景去选择，有着不同的优缺点。注意，如果m-s对中，master挂掉时候生产者无法向该topic提交，但消费者可以消费。</li></ol><p>因为大部分MQ我们在使用的时候要注意的东西其实偏顶层，但分析一下分布式架构就可以在使用的时候更清楚。<br>这里我们用kafka的分布式架构来进行对比：<br><a name="SNQGc"></a></p><h4 id="kafka分布式架构对比"><a href="#kafka分布式架构对比" class="headerlink" title="kafka分布式架构对比"></a>kafka分布式架构对比</h4><p>kafka在broker和topic之间引入了一个partition的概念，这个partition有点RAID1的味道，但完全不一样，因为这个使用网络进行同步，所以会有延迟，因此为了追求数据的线性一致性，就舍弃了topic粒度下的负载均衡，让对同一个topic生产和消费都从leader partition中获取。<br>当然如果每个topic的内容差不多，这种是没问题的，但如果为了追求可用性，当单一topic会非常热门的话，就有可能成为性能瓶颈。<br>当然这种情况最适合的场景就是实时通信软件，message的生产和消费每一个topic都比较均衡。并且这种的有序的保证是最高的。<br>但RocketMQ也可以做对有序性要求比较高的场景，只要控制好使用同步的主从同步策略，就可以从理论上保证消息的有序性。<br><a name="ocBLj"></a></p><h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h2><p>MQ作为一种中间件，本身就是为了解耦和突破吞吐瓶颈出现的存在的，因为配置不得当，可能会引入新的问题，所以还是要在合适的场景下选用合适的MQ用合适的架构方案去做这件事。</p>]]></content>
     
@@ -35,7 +58,7 @@
     </summary>
     
     
-      <category term="软将工程" scheme="https://kairbon.github.io/tags/%E8%BD%AF%E5%B0%86%E5%B7%A5%E7%A8%8B/"/>
+      <category term="软件工程" scheme="https://kairbon.github.io/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/"/>
     
   </entry>
   
