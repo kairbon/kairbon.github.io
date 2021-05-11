@@ -359,6 +359,66 @@ height:50vh;
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2019/07/18/nginx反向代理后tomcat如何获取请求的真实IP地址/" >
+            
+                <span>nginx反向代理后tomcat如何获取请求的真实IP地址</span>
+        </a>
+        <div class="abstract-content">
+            Nginx反向代理后，Servlet应用通过request.getRemoteAddr()取到的IP是Nginx的IP地址，并非客户端真实IP，通过request.getRequestURL()获取的域名、协议、端口都是Nginx访问Web应用时的域名、协议、端口，而非客户端浏览器地址栏上的真实域名、协议、端口。
+Nginx的反向代理实际上是客户端和真实的应用服务器之间的一个桥梁，客户端（一般是浏览器）访问Nginx服务器，Nginx再去访问Web应用服务器。对于Web应用来说，这次HTTP请求的客户端是Nginx而非真实的客户端浏览器，如果不做特殊处理的话，Web应用会把Nginx当作...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/18</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "软件工程">软件工程</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2019/07/18/强制覆盖别人的分支远程/" >
+            
+                <span>强制覆盖别人的分支远程</span>
+        </a>
+        <div class="abstract-content">
+            git push origin 分支名（想用这个分支覆盖后面）:分支名（被覆盖的分支） -f
+
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/18</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "git">git</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2019/07/15/git保存用户名和密码/" >
             
                 <span>git保存用户名和密码</span>
@@ -1016,9 +1076,35 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 18
+        Total : 20
         </div>
         <!-- search  -->
         
@@ -1031,6 +1117,16 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
     
     <div class="archive-year"> 2021 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/11</span><a class="archive-post-title" href= "/2021/05/11/基于Raft协议的NoSQL数据库的设计和实现-History/" >基于Raft协议的NoSQL数据库的设计和实现（2）-History</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/11</span><a class="archive-post-title" href= "/2021/05/11/基于Raft协议的NoSql数据库的设计和实现-简介/" >基于Raft协议的NoSQL数据库的设计和实现（1）-简介</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1149,13 +1245,13 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
     
         <span class="sidebar-tag-name" data-tags="分布式系统"><span class="iconfont-archer">&#xe606;</span>分布式系统</span>
     
-        <span class="sidebar-tag-name" data-tags="初学者"><span class="iconfont-archer">&#xe606;</span>初学者</span>
-    
         <span class="sidebar-tag-name" data-tags="软件工程"><span class="iconfont-archer">&#xe606;</span>软件工程</span>
     
-        <span class="sidebar-tag-name" data-tags="量子计算"><span class="iconfont-archer">&#xe606;</span>量子计算</span>
+        <span class="sidebar-tag-name" data-tags="初学者"><span class="iconfont-archer">&#xe606;</span>初学者</span>
     
         <span class="sidebar-tag-name" data-tags="git"><span class="iconfont-archer">&#xe606;</span>git</span>
+    
+        <span class="sidebar-tag-name" data-tags="量子计算"><span class="iconfont-archer">&#xe606;</span>量子计算</span>
     
         <span class="sidebar-tag-name" data-tags="这就是生活"><span class="iconfont-archer">&#xe606;</span>这就是生活</span>
     

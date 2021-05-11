@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://kairbon.github.io/"/>
-  <updated>2021-03-14T03:46:46.178Z</updated>
+  <updated>2021-05-11T09:00:22.205Z</updated>
   <id>https://kairbon.github.io/</id>
   
   <author>
@@ -15,6 +15,52 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>基于Raft协议的NoSQL数据库的设计和实现（2）-History</title>
+    <link href="https://kairbon.github.io/2021/05/11/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-History/"/>
+    <id>https://kairbon.github.io/2021/05/11/基于Raft协议的NoSQL数据库的设计和实现-History/</id>
+    <published>2021-05-11T08:58:56.000Z</published>
+    <updated>2021-05-11T09:00:22.205Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="基于Raft协议的NoSQL数据库的设计和实现-History"><a href="#基于Raft协议的NoSQL数据库的设计和实现-History" class="headerlink" title="基于Raft协议的NoSQL数据库的设计和实现-History"></a>基于Raft协议的NoSQL数据库的设计和实现-History</h2><h2 id="1-分布式存储系统"><a href="#1-分布式存储系统" class="headerlink" title="1. 分布式存储系统"></a>1. 分布式存储系统</h2><p>传统的集中式存储，主要采用存储区域网络（Storage Area Network，简称SAN）和网络附属存储（Network Attached Storage，简称NAS）。但是随着企业业务的高速发展和存储规模的扩大，这些传统集中式存储逐渐暴露出了维护成本高昂，可用性不高，热点等许多问题，除此之外，因为存储是集中式的方式，所以如果宕机，那么依赖它的一切服务都将会出现问题。当然解决这些可用性问题，业界也有许多方式。从硬件层面的有通过使用RAID，ZFS等技术来防止单磁盘故障导致的不可用，还有比如建设专用的存储数据中心，冗余电源等各种方式来提升其可用性。但这些都无疑使得存储单元的成本上升。</p><p>目前，无数工业界和研究界的目光都投射到分布式存储系统上面去解决大规模数据存储的问题。这个原因一方面是随着pc机变得越来越便宜，使得存储使用大规模计算集群成为可能，另一方面随着云计算的火热，各大云计算厂商都在拼命降低用户使用计算资源的成本，使得分布式存储变为企业数据存储的首要选择。</p><p>Oracle和SQL Server作为传统企业级大型关系型数据库，是之前大部分企业用户存储格式化数据首要的选择，然而其高昂的服务费和许多其他因素却使得许多企业不得不考虑更多问题。这时候，分布式NoSQL数据库像是一颗璀璨的新星从众多分布式存储架构中脱颖而出。这种数据库不仅解决了传统数据库遇到的性能和存储分配的问题，还有着极为优秀的可用性。例如Google的BigTable和Spanner，这些数据库结合分布式系统天生的抗单节点故障能力以及水平伸缩等特点，为大数据场景做了完美的支撑。</p><h2 id="2-NoSQL数据库"><a href="#2-NoSQL数据库" class="headerlink" title="2. NoSQL数据库"></a>2. NoSQL数据库</h2><p>目前在国内外大规模使用并且效果比较好的NoSQL数据库主要有Google的Spanner，Redis。这些系统每一种都经历了无数工业界的检验，尤其是Redis，支撑新浪微博的热点资讯，扛过了每秒几千万的流量，足以证明NoSQL数据库在工业界的实力。而对于NoSQL数据库本身来说，不仅在架构上做到高可用，高容错，一致性。通常也使用自己的API，来实现对数据本身的增删查改。下面就以Redis为例，讲述NoSQL数据库的特性。而本论文主要也是和Redis做对比。</p><h3 id="2-1-Redis"><a href="#2-1-Redis" class="headerlink" title="2.1 Redis"></a>2.1 Redis</h3><p>一开始，Redis是由出生于西西里岛的意大利人（Antirez）编写的，但到目前，Redis已经成为了阿里巴巴，腾讯等众多互联网一线大厂广泛使用的分布式内存数据库组件，主要用于缓存，队列，排行榜等众多Web功能的使用场景，在中国互联网中有着广泛的使用经验。但在实际使用场景中我们又通常会遇到数据丢失，服务不可用，一致性不足以支撑业务等问题。</p><p>而本文提出并实现一种，有着和Redis好用易于上手的DSL以及Client，并且解决了Redis一系列遗留的问题的基于j键值对的分布式内存NoSQL数据库-DistKV。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;基于Raft协议的NoSQL数据库的设计和实现-History&quot;&gt;&lt;a href=&quot;#基于Raft协议的NoSQL数据库的设计和实现-History&quot; class=&quot;headerlink&quot; title=&quot;基于Raft协议的NoSQL数据库的设计和实现-Histor
+      
+    
+    </summary>
+    
+    
+      <category term="分布式系统" scheme="https://kairbon.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>基于Raft协议的NoSQL数据库的设计和实现（1）-简介</title>
+    <link href="https://kairbon.github.io/2021/05/11/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-%E7%AE%80%E4%BB%8B/"/>
+    <id>https://kairbon.github.io/2021/05/11/基于Raft协议的NoSql数据库的设计和实现-简介/</id>
+    <published>2021-05-11T08:58:56.000Z</published>
+    <updated>2021-05-11T08:59:57.257Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="基于Raft协议的NoSQL数据库的设计和实现"><a href="#基于Raft协议的NoSQL数据库的设计和实现" class="headerlink" title="基于Raft协议的NoSQL数据库的设计和实现"></a>基于Raft协议的NoSQL数据库的设计和实现</h2><h3 id="1-论文简介"><a href="#1-论文简介" class="headerlink" title="1. 论文简介"></a>1. 论文简介</h3><p>近些年来，随着大数据业务和巨型Web网站的增多，如何存储和管理各种数据成为了各大公司棘手的难题。为了存储日益增加的用户个人数据和业务数据，能够灵活简单使用，高可用的，使用简便的NoSQL数据库在工业界的使用越来越多。本课题提出了一种基于Raft一致性协议的内存式NoSQL数据库（下称DistKV），并且支持表结构。本课题对当前NoSQL数据库使用上因为架构设计导致的丢数据，不可用，性能瓶颈等问题进行了探讨和优化，并且尤其对于大数据存储场景做出专项优化。</p><ol><li><p>设计实现DistKV的基本架构，考虑横向扩展，表结构存储等基本需求。</p></li><li><p>设计实现高性能专用RPC用于降低传输延时。</p></li><li><p>对于业务中使用NoSQL数据库遇到的丢数据，不可用问题做专项测试和比对。</p></li><li><p>和市面流行的NoSQL数据库在读写方面进行比对。</p></li></ol><p>本论文主要通过以下几个方面展开讲述本系统的设计。</p><ol><li>History</li><li>Architecture</li><li>Raft</li><li>Partition和StoreServer<ol><li>Multi-thread</li><li>Sync</li></ol></li><li>MetaServer<ol><li>Function</li><li>Optimization</li></ol></li><li>Algorithm和Data struct<ol><li>SkipList</li></ol></li><li>DRPC<ol><li>NIO</li><li>Multi-Thread</li><li>Code</li></ol></li><li>API<ol><li>DistKV Client</li><li>DRPC Client</li></ol></li><li>Benchmark</li><li>Conclusion</li><li>Acknowledgments</li><li>Reference</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;基于Raft协议的NoSQL数据库的设计和实现&quot;&gt;&lt;a href=&quot;#基于Raft协议的NoSQL数据库的设计和实现&quot; class=&quot;headerlink&quot; title=&quot;基于Raft协议的NoSQL数据库的设计和实现&quot;&gt;&lt;/a&gt;基于Raft协议的NoSQL数据库
+      
+    
+    </summary>
+    
+    
+      <category term="分布式系统" scheme="https://kairbon.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
   
   <entry>
     <title>分布式事务-2pc,3pc</title>
