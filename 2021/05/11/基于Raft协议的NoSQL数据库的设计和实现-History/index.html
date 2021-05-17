@@ -272,7 +272,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">943</span>阅读时长: <span class="post-count reading-time">3 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">948</span>阅读时长: <span class="post-count reading-time">3 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -405,8 +405,8 @@ height:50vh;
 <p>目前，无数工业界和研究界的目光都投射到分布式存储系统上面去解决大规模数据存储的问题。这个原因一方面是随着pc机变得越来越便宜，使得存储使用大规模计算集群成为可能，另一方面随着云计算的火热，各大云计算厂商都在拼命降低用户使用计算资源的成本，使得分布式存储变为企业数据存储的首要选择。</p>
 <p>Oracle和SQL Server作为传统企业级大型关系型数据库，是之前大部分企业用户存储格式化数据首要的选择，然而其高昂的服务费和许多其他因素却使得许多企业不得不考虑更多问题。这时候，分布式NoSQL数据库像是一颗璀璨的新星从众多分布式存储架构中脱颖而出。这种数据库不仅解决了传统数据库遇到的性能和存储分配的问题，还有着极为优秀的可用性。例如Google的BigTable和Spanner，这些数据库结合分布式系统天生的抗单节点故障能力以及水平伸缩等特点，为大数据场景做了完美的支撑。</p>
 <h2 id="2-NoSQL数据库"><a href="#2-NoSQL数据库" class="headerlink" title="2. NoSQL数据库"></a>2. NoSQL数据库</h2><p>目前在国内外大规模使用并且效果比较好的NoSQL数据库主要有Google的Spanner，Redis。这些系统每一种都经历了无数工业界的检验，尤其是Redis，支撑新浪微博的热点资讯，扛过了每秒几千万的流量，足以证明NoSQL数据库在工业界的实力。而对于NoSQL数据库本身来说，不仅在架构上做到高可用，高容错，一致性。通常也使用自己的API，来实现对数据本身的增删查改。下面就以Redis为例，讲述NoSQL数据库的特性。而本论文主要也是和Redis做对比。</p>
-<h3 id="2-1-Redis"><a href="#2-1-Redis" class="headerlink" title="2.1 Redis"></a>2.1 Redis</h3><p>一开始，Redis是由出生于西西里岛的意大利人（Antirez）编写的，但到目前，Redis已经成为了阿里巴巴，腾讯等众多互联网一线大厂广泛使用的分布式内存数据库组件，主要用于缓存，队列，排行榜等众多Web功能的使用场景，在中国互联网中有着广泛的使用经验。但在实际使用场景中我们又通常会遇到数据丢失，服务不可用，一致性不足以支撑业务等问题。</p>
-<p>而本文提出并实现一种，有着和Redis好用易于上手的DSL以及Client，并且解决了Redis一系列遗留的问题的基于j键值对的分布式内存NoSQL数据库-DistKV。</p>
+<h3 id="2-1-Redis"><a href="#2-1-Redis" class="headerlink" title="2.1 Redis"></a>2.1 Redis</h3><p>一开始，Redis是由出生于西西里岛的意大利人（Antirez）编写的，但到目前，Redis已经成为了阿里巴巴，腾讯等众多互联网一线大厂广泛使用的分布式内存数据库组件，主要用于缓存，队列，排行榜等众多Web功能的使用场景。Redis在中国互联网中有着广泛的使用经验。但在实际使用场景中我们又通常会遇到数据丢失，服务不可用，一致性不足以支撑业务等问题。</p>
+<p>而本文提出并实现一种，有着和Redis好用易于上手的DSL以及Client，并且解决了Redis在大数据场景下的一些问题的基于键值对的分布式内存NoSQL数据库-DistKV。</p>
 
     </article>
     <!-- license  -->
@@ -415,13 +415,18 @@ height:50vh;
             <p>原文作者：<a href="https://kairbon.github.io">Karbon</a>
             <p>原文链接：<a href="https://kairbon.github.io/2021/05/11/基于Raft协议的NoSQL数据库的设计和实现-History/">https://kairbon.github.io/2021/05/11/基于Raft协议的NoSQL数据库的设计和实现-History/</a>
             <p>发表日期：<a href="https://kairbon.github.io/2021/05/11/基于Raft协议的NoSQL数据库的设计和实现-History/">May 11th 2021, 4:58:56 pm</a>
-            <p>更新日期：<a href="https://kairbon.github.io/2021/05/11/基于Raft协议的NoSQL数据库的设计和实现-History/">May 11th 2021, 5:00:22 pm</a>
+            <p>更新日期：<a href="https://kairbon.github.io/2021/05/11/基于Raft协议的NoSQL数据库的设计和实现-History/">May 17th 2021, 10:48:46 am</a>
             <p>版权声明：本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
     <!-- paginator  -->
     <ul class="post-paginator">
         <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2021/05/17/基于Raft协议的NoSQL数据库的设计和实现-Raft/" title= "基于Raft协议的NoSQL数据库的设计和实现（3）-Raft">
+                    <div class="nextTitle">基于Raft协议的NoSQL数据库的设计和实现（3）-Raft</div>
+                </a>
             
         </li>
         <li class="previous">
@@ -785,9 +790,45 @@ top:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 20
+        Total : 22
         </div>
         <!-- search  -->
         
@@ -800,6 +841,16 @@ top:50vh;
     
     <div class="archive-year"> 2021 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/17</span><a class="archive-post-title" href= "/2021/05/17/基于Raft协议的NoSQL数据库的设计和实现-Architecture/" >基于Raft协议的NoSQL数据库的设计和实现（4）-Architecture</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/17</span><a class="archive-post-title" href= "/2021/05/17/基于Raft协议的NoSQL数据库的设计和实现-Raft/" >基于Raft协议的NoSQL数据库的设计和实现（3）-Raft</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -928,13 +979,13 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="分布式系统"><span class="iconfont-archer">&#xe606;</span>分布式系统</span>
     
-        <span class="sidebar-tag-name" data-tags="软件工程"><span class="iconfont-archer">&#xe606;</span>软件工程</span>
-    
         <span class="sidebar-tag-name" data-tags="初学者"><span class="iconfont-archer">&#xe606;</span>初学者</span>
     
         <span class="sidebar-tag-name" data-tags="git"><span class="iconfont-archer">&#xe606;</span>git</span>
     
         <span class="sidebar-tag-name" data-tags="量子计算"><span class="iconfont-archer">&#xe606;</span>量子计算</span>
+    
+        <span class="sidebar-tag-name" data-tags="软件工程"><span class="iconfont-archer">&#xe606;</span>软件工程</span>
     
         <span class="sidebar-tag-name" data-tags="这就是生活"><span class="iconfont-archer">&#xe606;</span>这就是生活</span>
     

@@ -346,6 +346,70 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2021/05/17/基于Raft协议的NoSQL数据库的设计和实现-Architecture/" >
+            
+                <span>基于Raft协议的NoSQL数据库的设计和实现（4）-Architecture</span>
+        </a>
+        <div class="abstract-content">
+            基于Raft协议的NoSQL数据库的设计和实现-ArchitectureDistKV有着独特的架构，这使得它在一致性方面的能力尤其出色。如图一
+
+图一 DistKV 分布式架构
+
+1. Store Server在DistKV中，将存储的数据分为无数可横向扩展的Partition，每组Partitation内部都保留着与其他Partition不同的数据。因为每个Partition都保存着唯一的一份数据，因此需要一些容灾策略来保证数据的可用性。我们采用一组Raft集群来做到这点，每当有DML来修改此分片的数据状态时，Raft将会把操作同步执行到每一个机器上。
+1.1 数据模型因为DistKV...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/05/17</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "分布式系统">分布式系统</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2021/05/17/基于Raft协议的NoSQL数据库的设计和实现-Raft/" >
+            
+                <span>基于Raft协议的NoSQL数据库的设计和实现（3）-Raft</span>
+        </a>
+        <div class="abstract-content">
+            基于Raft协议的NoSQL数据库的设计和实现-Raft1.  Raft的历史所有共识算法都是由一个基本的问题出发的，就是拜占庭将军问题：拜占庭将军问题是一个协议问，拜占庭帝国军队的将军们必须全体一致的决定是否攻击某一支敌军。问题是这些将军在地理上是分隔开来的，并且将军中存在叛徒。叛徒可以任意行动以达到以下目标：欺骗某些将军采取进攻行动；促成一个不是所有将军都同意的决定，如当将军们不希望进攻时促成进攻行动；或者迷惑某些将军，使他们无法做出决定。如果叛徒达到了这些目的之一，则任何攻击行动的结果都是注定要失败的，只有完全达成一致的努力才能获得胜利。
+拜占庭假设是对现实世界的模型化，由于硬件错...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/05/17</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "分布式系统">分布式系统</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2021/05/11/基于Raft协议的NoSQL数据库的设计和实现-History/" >
             
                 <span>基于Raft协议的NoSQL数据库的设计和实现（2）-History</span>
@@ -823,9 +887,45 @@ RocketMQ分布式架构RocketMQ的分布式架构挺有特点的，抛开nameser
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 20
+        Total : 22
         </div>
         <!-- search  -->
         
@@ -838,6 +938,16 @@ RocketMQ分布式架构RocketMQ的分布式架构挺有特点的，抛开nameser
     
     <div class="archive-year"> 2021 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/17</span><a class="archive-post-title" href= "/2021/05/17/基于Raft协议的NoSQL数据库的设计和实现-Architecture/" >基于Raft协议的NoSQL数据库的设计和实现（4）-Architecture</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/17</span><a class="archive-post-title" href= "/2021/05/17/基于Raft协议的NoSQL数据库的设计和实现-Raft/" >基于Raft协议的NoSQL数据库的设计和实现（3）-Raft</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -966,13 +1076,13 @@ RocketMQ分布式架构RocketMQ的分布式架构挺有特点的，抛开nameser
     
         <span class="sidebar-tag-name" data-tags="分布式系统"><span class="iconfont-archer">&#xe606;</span>分布式系统</span>
     
-        <span class="sidebar-tag-name" data-tags="软件工程"><span class="iconfont-archer">&#xe606;</span>软件工程</span>
-    
         <span class="sidebar-tag-name" data-tags="初学者"><span class="iconfont-archer">&#xe606;</span>初学者</span>
     
         <span class="sidebar-tag-name" data-tags="git"><span class="iconfont-archer">&#xe606;</span>git</span>
     
         <span class="sidebar-tag-name" data-tags="量子计算"><span class="iconfont-archer">&#xe606;</span>量子计算</span>
+    
+        <span class="sidebar-tag-name" data-tags="软件工程"><span class="iconfont-archer">&#xe606;</span>软件工程</span>
     
         <span class="sidebar-tag-name" data-tags="这就是生活"><span class="iconfont-archer">&#xe606;</span>这就是生活</span>
     
