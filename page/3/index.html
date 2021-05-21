@@ -359,6 +359,141 @@ height:50vh;
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2019/07/13/进化策略（Evolution-Strategy）/" >
+            
+                <span>进化策略（Evolution Strategy）</span>
+        </a>
+        <div class="abstract-content">
+            进化策略（Evolution Strategy）建议在了解ES之前先确保对遗传算法的思路有一定的了解，在比较中学习更有效率
+与遗传算法的相同之处：都是利用进化理论进行优化，即利用遗传信息一代代传承变异适者生存，从而得到最优解。
+与遗传算法的不同之处：
+1.DNA序列采用实数编码，而非0-1二进制码2.变异时无法进行简单的0-1互换，思考：实数值该怎么变？随机？变异思路：为DNA序列上的每一个实数值添加变异强度。根据这个变异强度决定DNA序列上的实数值该变成多少。
+3.编码：由第2点可知，进化策略在编码时，不仅要有表示解决方案的实数编码链A1，还得有一条表示每个实属值对应的变异强度值组成的...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/13</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Robocup3D">Robocup3D</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2019/07/13/GA-遗传算法-概念理解/" >
+            
+                <span>GA(遗传算法)概念理解</span>
+        </a>
+        <div class="abstract-content">
+            GA(遗传算法)概念理解本文来源！
+遗传算法的手工模拟计算示例
+为更好地理解遗传算法的运算过程，下面用手工计算来简单地模拟遗传算法的各​    个主要执行步骤。
+​     例：求下述二元函数的最大值：
+
+​    (1) 个体编码​           遗传算法的运算对象是表示个体的符号串，所以必须把变量 x1, x2 编码为一种​       符号串。本题中，用无符号二进制整数来表示。​           因 x1, x2 为 0 ~ 7之间的整数，所以分别用3位无符号二进制整数来表示，将它​       们连接在一起所组成的6位无符号二进制数就形成了个体的基因型，表示一个可​  ...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/13</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Robocup3D">Robocup3D</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2019/07/13/robocup3D-如何将参数文件打包为动态库/" >
+            
+                <span>robocup3D 如何将参数文件打包为动态库</span>
+        </a>
+        <div class="abstract-content">
+            （本文适合hfut robocup3d足球队员阅读）
+我校Robocup3d队伍使用的是来自于UT的底层代码，我们在这基础上进行优化，修改。
+在现在的比赛中，通常要提交二进制代码，在底层文件中，我们通过cma算法优化出来的参数会以文本的形式存在，这样会导致别人直接可以看到我们的参数文件。
+下面我们先进行分析在sh脚本启动的时候，会根据机器人的type来进行注入
+1234567891011121314151617181920212223242526272829303132for ((i=1;i&lt;=$NUM_PLAYERS;i++)); do    case $i in	1|2)	  ...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/13</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Robocup3D">Robocup3D</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2019/07/13/优化机器人动作的CMA-ES算法-python版本的api分析/" >
+            
+                <span>优化机器人动作的CMA-ES算法 python版本的api分析</span>
+        </a>
+        <div class="abstract-content">
+            首先，我先声明，本人并不研究机器学习或人工智能，这篇文章主要是为了偶尔使用一下某个算法所作的分析
+1.从官网说起  首先，可以从搜索引擎很轻易搜索到它的pypi网址：  https://pypi.org/project/cma/  打开后，我们可以看到如何去安装cma。目前版本为    这里我就把如何安装跳过，直接进入api分析：
+2.API分析这是官网用例的第一个，是在python Shell中运行的
+&gt;&gt;&gt; import cma
+&gt;&gt;&gt; help(cma)
+    &lt;output omitted&gt;
+&gt;&gt;&gt; es = c...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/13</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Robocup3D">Robocup3D</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2019/07/13/Nginx集群conf文件/" >
             
                 <span>Nginx集群conf文件</span>
@@ -876,9 +1011,59 @@ height:50vh;
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 22
+        Total : 26
         </div>
         <!-- search  -->
         
@@ -891,6 +1076,26 @@ height:50vh;
     
     <div class="archive-year"> 2021 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2021/05/21/基于Raft协议的NoSQL数据库的设计和实现-Algorithm和Data Struct/" >基于Raft协议的NoSQL数据库的设计和实现（6）-Algorithm和Data struct</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2021/05/21/基于Raft协议的NoSQL数据库的设计和实现-DRPC/" >基于Raft协议的NoSQL数据库的设计和实现（7）-DRPC</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2021/05/21/基于Raft协议的NoSQL数据库的设计和实现-Meta Server/" >基于Raft协议的NoSQL数据库的设计和实现（5）-MetaServer</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span><a class="archive-post-title" href= "/2021/05/21/基于Raft协议的NoSQL数据库的设计和实现-Partition和StoreServer/" >基于Raft协议的NoSQL数据库的设计和实现（4）-Partition和StoreServer</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1031,11 +1236,11 @@ height:50vh;
     
         <span class="sidebar-tag-name" data-tags="初学者"><span class="iconfont-archer">&#xe606;</span>初学者</span>
     
+        <span class="sidebar-tag-name" data-tags="软件工程"><span class="iconfont-archer">&#xe606;</span>软件工程</span>
+    
         <span class="sidebar-tag-name" data-tags="git"><span class="iconfont-archer">&#xe606;</span>git</span>
     
         <span class="sidebar-tag-name" data-tags="量子计算"><span class="iconfont-archer">&#xe606;</span>量子计算</span>
-    
-        <span class="sidebar-tag-name" data-tags="软件工程"><span class="iconfont-archer">&#xe606;</span>软件工程</span>
     
         <span class="sidebar-tag-name" data-tags="这就是生活"><span class="iconfont-archer">&#xe606;</span>这就是生活</span>
     
