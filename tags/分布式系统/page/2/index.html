@@ -346,54 +346,24 @@
     
     
     <article class="index-post">
-        <a class="abstract-title" href = "/2019/07/13/Nginx集群conf文件/" >
+        <a class="abstract-title" href = "/2019/12/19/Dst-Server实现WorkerPool的必要性/" >
             
-                <span>Nginx集群conf文件</span>
+                <span>Dst-Server实现WorkerPool的必要性思考</span>
         </a>
         <div class="abstract-content">
-            12345678910111213141516171819202122232425262728293031323334353637383940Nginx集群配置文件worker_processes  1;#工作进程的个数，一般与计算机的cpu核数一致    events &#123;      worker_connections  1024;#单个进程最大连接数（最大连接数=连接数*进程数）  &#125;    http &#123;      include       mime.types; #文件扩展名与文件类型映射表      default_type  applicatio...
+            前言​    （本文适合对Dst项目有一定认识的人阅读）项目地址
+​    最近，我一直有一个问题，我始终没有思考明白，Dst中，Dst-Server 要采用WorkerPool的模型去进行数据操作的必要性有多大，因为从实现角度而言，Dst所采用的DRPC是基于Netty的。对于Netty来说，他的Worker线程池完全可以复用。比如加一个ThreadLocal的变量，也就是Shard。按照架构设计的话也是没有问题的，而且Netty的Worker线程中也有BlockingQueue，这样对一个Shard的操作也是不会出现冲突的情况，会按照入队的顺序去执行相应的操作。所以从实现角度来说说不...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
             <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/13</span>
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/12/19</span>
             </div>
             <!-- tags  -->
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "初学者">初学者</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/07/10/如何开发一个APP/" >
-            
-                <span>如何开发一个APP</span>
-        </a>
-        <div class="abstract-content">
-              如何自己从零开发一个app呢？估计很多喜欢编程的人都考虑过，今天，我想把我的经验分享给大家，如何开发出一款app。里面一些专有名词我会标出。
-一，app的分类  要开发一款app，首先要确定你要做的功能是什么，要在什么平台上运行等，这里就不再赘述，然后就是确定app的分类，因为这就涉及到问题的核心，我该学些什么，怎么去入门。其实，在传统软件工程，一般会把软件分成分布式和单机两种类型，下面详细说一下这两种。
-1.单机软件  这类软件通常运行在自己的设备上，无需与软件开发商进行数据交换，或者交换的次数很少，比如单机游戏，比如自己做的小工具等，这类软件你需要对你所期望运行的设备，操作系统和...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/10</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "初学者">初学者</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "分布式系统">分布式系统</a>
     
 </div>
             
@@ -401,6 +371,10 @@
     </article>
     
     <!-- paginator  -->
+    
+    <nav class="page-nav">
+        <a class="extend prev" rel="prev" href="/tags/分布式系统/">&#60; PREV</a><a class="page-number" href="/tags/分布式系统/">1</a><span class="page-number current">2</span>
+    </nav>
     
 </main>
             <!-- profile -->

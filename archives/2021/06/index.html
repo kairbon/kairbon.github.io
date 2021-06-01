@@ -346,54 +346,24 @@
     
     
     <article class="index-post">
-        <a class="abstract-title" href = "/2019/07/13/Nginx集群conf文件/" >
+        <a class="abstract-title" href = "/2021/06/01/基于Raft协议的NoSQL数据库的设计和实现-API.md/" >
             
-                <span>Nginx集群conf文件</span>
+                <span>基于Raft协议的NoSQL数据库的设计和实现（9）-API</span>
         </a>
         <div class="abstract-content">
-            12345678910111213141516171819202122232425262728293031323334353637383940Nginx集群配置文件worker_processes  1;#工作进程的个数，一般与计算机的cpu核数一致    events &#123;      worker_connections  1024;#单个进程最大连接数（最大连接数=连接数*进程数）  &#125;    http &#123;      include       mime.types; #文件扩展名与文件类型映射表      default_type  applicatio...
+            基于Raft协议的NoSQL数据库的设计和实现-API1. 设计展示DistKV自己设计并实现了自己的好用的命令行语言，Demo如下：
+1. String concept1234567891011distkv-cli &gt; put &quot;k1&quot; &quot;v1&quot;distkv-cli &gt; okdistkv-cli &gt; str.put &quot;k1&quot; &quot;v1&quot;   # the same as `put`distkv-cli &gt; okdistkv-cli &gt; get &quot;k1&quot;distk...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
             <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/13</span>
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/06/01</span>
             </div>
             <!-- tags  -->
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "初学者">初学者</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2019/07/10/如何开发一个APP/" >
-            
-                <span>如何开发一个APP</span>
-        </a>
-        <div class="abstract-content">
-              如何自己从零开发一个app呢？估计很多喜欢编程的人都考虑过，今天，我想把我的经验分享给大家，如何开发出一款app。里面一些专有名词我会标出。
-一，app的分类  要开发一款app，首先要确定你要做的功能是什么，要在什么平台上运行等，这里就不再赘述，然后就是确定app的分类，因为这就涉及到问题的核心，我该学些什么，怎么去入门。其实，在传统软件工程，一般会把软件分成分布式和单机两种类型，下面详细说一下这两种。
-1.单机软件  这类软件通常运行在自己的设备上，无需与软件开发商进行数据交换，或者交换的次数很少，比如单机游戏，比如自己做的小工具等，这类软件你需要对你所期望运行的设备，操作系统和...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/10</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "初学者">初学者</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "分布式系统">分布式系统</a>
     
 </div>
             
