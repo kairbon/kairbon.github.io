@@ -9,7 +9,6 @@
 
 
 
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -192,14 +191,14 @@
     }
 </style>
 
-    <link rel="preload" href="/css/style.css?v=202107" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="/css/dark.css?v=202107" as="style">
-    <link rel="stylesheet" href="/css/mobile.css?v=202107" media="(max-width: 980px)">
+    <link rel="preload" href="/css/style.css?v=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/dark.css?v=" as="style">
+    <link rel="stylesheet" href="/css/mobile.css?v=" media="(max-width: 960px)">
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
-    <link rel="preload" href="/scripts/main.js?v=202107" as="script">
-    <link rel="preload" href="/scripts/dark.js?v=202107" as="script">
+    <link rel="preload" href="/scripts/main.js?v=" as="script">
+    <link rel="preload" href="/scripts/dark.js?v=" as="script">
     <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
     <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
     <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/js/all.min.js" data-auto-replace-svg="nest"></script>
@@ -209,7 +208,8 @@
     
     <!-- 谷歌统计  -->
     
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Kairbon's Blog" type="application/atom+xml">
+</head>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script type="text/javascript">
@@ -250,8 +250,6 @@
     
 </header>
 
-        <!-- dark mode -->
-        <script src="/scripts/dark.js"></script>
         <!-- fixed footer -->
         <footer class="footer-fixed">
     <!-- back to top button -->
@@ -268,6 +266,7 @@
 
         <!-- wrapper -->
         <div class="wrapper">
+            <div class="background-holder"></div>
             <div class="site-intro" style="
 
 
@@ -424,6 +423,115 @@
             <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
             <div class="container container-unloaded">
                 <main class="main index-page">
+    
+        
+        
+        
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2019/12/19/Dst-Server%E5%AE%9E%E7%8E%B0WorkerPool%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7/">
+                
+                <span class="abstract-title-text">Dst-Server实现WorkerPool的必要性思考</span>
+            </a>
+            <div class="abstract-content">
+                前言​    （本文适合对Dst项目有一定认识的人阅读）项目地址
+​    最近，我一直有一个问题，我始终没有思考明白，Dst中，Dst-Server 要采用WorkerPool的模型去进行数据操作的必要性有多大，因为从实现角度而言，Dst所采用的DRPC是基于Netty的。对于Netty来说，他的Worker线程池完全可以复用。比如加一个ThreadLocal的变量，也就是Shard。按照架构设计的话也是没有问题的，而且Netty的Worker线程中也有BlockingQueue，这样对一个Shard的操作也是不会出现冲突的情况，会按照入队的顺序去执行相应的操作。所以从实现角度来说说不...
+            </div>
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/12/19</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="分布式系统">分布式系统</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2019/07/23/%E5%B8%B8%E7%94%A8%E5%B8%B8%E5%BF%98%E7%9A%84git%E5%91%BD%E4%BB%A4/">
+                
+                <span class="abstract-title-text">常用常忘的git命令</span>
+            </a>
+            <div class="abstract-content">
+                最近一直在使用git团伙作案（误
+所以记录一下常用常忘的一些命令
+删除分支　　1 删除本地分支： git branch -d dev
+　　2 如果删除不了可以强制删除，git branch -D dev
+　　3 有必要的情况下，删除远程分支：git push origin –delete dev
+
+            </div>
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/23</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="git">git</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2019/07/20/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91MongoDB%EF%BC%88Windows%EF%BC%89/">
+                
+                <span class="abstract-title-text">如何编译MongoDB（Windows）</span>
+            </a>
+            <div class="abstract-content">
+                以下资料均来自官网或源代码的说明文件
+MongoDB 是一款基于文档的通用分布式数据库
+  由 C++ 语言编写，MongoDB 是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。
+
+如何编译？
+  不说废话，直接开始上手。首先其官网网址为https://www.mongodb.com/    点击try free即可下载其源码和对应平台二进制    官网server版最新为4.2.0    但github上有更新的版本https://github.com/mongodb    通过git clone即可。目录如下    根据github上的r...
+            </div>
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/20</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="软件工程">软件工程</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="分布式数据库">分布式数据库</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
     
         
         
@@ -673,114 +781,10 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2019/07/13/%E4%BC%98%E5%8C%96%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%8A%A8%E4%BD%9C%E7%9A%84CMA-ES%E7%AE%97%E6%B3%95-python%E7%89%88%E6%9C%AC%E7%9A%84api%E5%88%86%E6%9E%90/">
-                
-                <span class="abstract-title-text">优化机器人动作的CMA-ES算法 python版本的api分析</span>
-            </a>
-            <div class="abstract-content">
-                首先，我先声明，本人并不研究机器学习或人工智能，这篇文章主要是为了偶尔使用一下某个算法所作的分析
-1.从官网说起  首先，可以从搜索引擎很轻易搜索到它的pypi网址：  https://pypi.org/project/cma/  打开后，我们可以看到如何去安装cma。目前版本为    这里我就把如何安装跳过，直接进入api分析：
-2.API分析这是官网用例的第一个，是在python Shell中运行的
-&gt;&gt;&gt; import cma
-&gt;&gt;&gt; help(cma)
-    &lt;output omitted&gt;
-&gt;&gt;&gt; es = c...
-            </div>
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/13</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="Robocup3D">Robocup3D</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/">
-                
-                <span class="abstract-title-text">Nginx集群conf文件</span>
-            </a>
-            <div class="abstract-content">
-                12345678910111213141516171819202122232425262728293031323334353637383940Nginx集群配置文件worker_processes  1;#工作进程的个数，一般与计算机的cpu核数一致    events &#123;      worker_connections  1024;#单个进程最大连接数（最大连接数=连接数*进程数）  &#125;    http &#123;      include       mime.types; #文件扩展名与文件类型映射表      default_type  applicatio...
-            </div>
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/13</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="初学者">初学者</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2019/07/10/%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AAAPP/">
-                
-                <span class="abstract-title-text">如何开发一个APP</span>
-            </a>
-            <div class="abstract-content">
-                  如何自己从零开发一个app呢？估计很多喜欢编程的人都考虑过，今天，我想把我的经验分享给大家，如何开发出一款app。里面一些专有名词我会标出。
-一，app的分类  要开发一款app，首先要确定你要做的功能是什么，要在什么平台上运行等，这里就不再赘述，然后就是确定app的分类，因为这就涉及到问题的核心，我该学些什么，怎么去入门。其实，在传统软件工程，一般会把软件分成分布式和单机两种类型，下面详细说一下这两种。
-1.单机软件  这类软件通常运行在自己的设备上，无需与软件开发商进行数据交换，或者交换的次数很少，比如单机游戏，比如自己做的小工具等，这类软件你需要对你所期望运行的设备，操作系统和...
-            </div>
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/10</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="初学者">初学者</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
-            <a class="extend prev" rel="prev" href="/archives/page/2/">&lt; PREV</a><a class="page-number" href="/archives/">1</a><a class="page-number" href="/archives/page/2/">2</a><span class="page-number current">3</span>
+            <a class="extend prev" rel="prev" href="/archives/page/2/">&lt; PREV</a><a class="page-number" href="/archives/">1</a><a class="page-number" href="/archives/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/archives/page/4/">4</a><a class="extend next" rel="next" href="/archives/page/4/">NEXT &gt;</a>
         </nav>
     
 </main>
@@ -1031,7 +1035,48 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1262,7 +1307,7 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 30
+        Total : 33
         </div>
         <!-- search  -->
         
@@ -1278,20 +1323,38 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
             
         
         <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span>
+            <a class="archive-post-title" href="/2021/09/12/%E4%BE%9B%E5%BA%94%E9%93%BE%E7%AE%80%E6%98%93%E4%BA%A7%E5%93%81%E8%AE%BE%E8%AE%A1/">供应链简易产品设计（PRD）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span>
+            <a class="archive-post-title" href="/2021/08/23/Disrupoter%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/">Disrupoter应用实践</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span>
+            <a class="archive-post-title" href="/2021/08/15/Hbase%E5%AD%A6%E4%B9%A0/">Hbase学习1——从论文讲起（还没搞完）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/14</span>
+            <a class="archive-post-title" href="/2021/08/14/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%842/">思考自己能做到的（2）梦的张力——小张（写了一点点）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
             <span class="archive-post-date">08/11</span>
             <a class="archive-post-title" href="/2021/08/11/%E6%AF%8F%E6%97%A5%E6%89%93%E5%8D%A1/">每日打卡</a>
         </li>
     
         
         <li class="archive-post-item">
-            <span class="archive-post-date">08/11</span>
-            <a class="archive-post-title" href="/2021/08/11/Hbase%E5%AD%A6%E4%B9%A0/">Hbase学习（在总结了在总结了）</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
             <span class="archive-post-date">08/08</span>
-            <a class="archive-post-title" href="/2021/08/08/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%84%EF%BC%881%EF%BC%89/">思考自己能做到的（1）开篇（8.11 update）</a>
+            <a class="archive-post-title" href="/2021/08/08/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%841/">思考自己能做到的（1）开篇（8.11 update）</a>
         </li>
     
         
@@ -1339,13 +1402,13 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
         
         <li class="archive-post-item">
             <span class="archive-post-date">05/11</span>
-            <a class="archive-post-title" href="/2021/05/11/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-%E7%AE%80%E4%BB%8B/">基于Raft协议的NoSQL数据库的设计和实现（1）-简介</a>
+            <a class="archive-post-title" href="/2021/05/11/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-History/">基于Raft协议的NoSQL数据库的设计和实现（2）-History</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">05/11</span>
-            <a class="archive-post-title" href="/2021/05/11/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-History/">基于Raft协议的NoSQL数据库的设计和实现（2）-History</a>
+            <a class="archive-post-title" href="/2021/05/11/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-%E7%AE%80%E4%BB%8B/">基于Raft协议的NoSQL数据库的设计和实现（1）-简介</a>
         </li>
     
         
@@ -1441,13 +1504,13 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
         
         <li class="archive-post-item">
             <span class="archive-post-date">07/13</span>
-            <a class="archive-post-title" href="/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/">Nginx集群conf文件</a>
+            <a class="archive-post-title" href="/2019/07/13/GA-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95-%E6%A6%82%E5%BF%B5%E7%90%86%E8%A7%A3/">GA(遗传算法)概念理解</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">07/13</span>
-            <a class="archive-post-title" href="/2019/07/13/GA-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95-%E6%A6%82%E5%BF%B5%E7%90%86%E8%A7%A3/">GA(遗传算法)概念理解</a>
+            <a class="archive-post-title" href="/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/">Nginx集群conf文件</a>
         </li>
     
         
@@ -1480,9 +1543,9 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
         
-            <span class="sidebar-tag-name" data-tags="分布式系统">
+            <span class="sidebar-tag-name" data-tags="分布式计算">
                 <span class="iconfont-archer">&#xe606;</span>
-                分布式系统
+                分布式计算
             </span>
         
             <span class="sidebar-tag-name" data-tags="Robocup3D">
@@ -1490,14 +1553,19 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
                 Robocup3D
             </span>
         
-            <span class="sidebar-tag-name" data-tags="初学者">
+            <span class="sidebar-tag-name" data-tags="分布式系统">
                 <span class="iconfont-archer">&#xe606;</span>
-                初学者
+                分布式系统
             </span>
         
             <span class="sidebar-tag-name" data-tags="软件工程">
                 <span class="iconfont-archer">&#xe606;</span>
                 软件工程
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="初学者">
+                <span class="iconfont-archer">&#xe606;</span>
+                初学者
             </span>
         
             <span class="sidebar-tag-name" data-tags="git">
@@ -1510,14 +1578,24 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
                 这就是生活
             </span>
         
-            <span class="sidebar-tag-name" data-tags="量子计算">
+            <span class="sidebar-tag-name" data-tags="项目经理">
                 <span class="iconfont-archer">&#xe606;</span>
-                量子计算
+                项目经理
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="产品经理">
+                <span class="iconfont-archer">&#xe606;</span>
+                产品经理
             </span>
         
             <span class="sidebar-tag-name" data-tags="分布式数据库">
                 <span class="iconfont-archer">&#xe606;</span>
                 分布式数据库
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="量子计算">
+                <span class="iconfont-archer">&#xe606;</span>
+                量子计算
             </span>
         
     </div>
@@ -1531,9 +1609,9 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="Dst">
+        <span class="sidebar-category-name" data-categories="分布式系统">
             <span class="iconfont-archer">&#xe60a;</span>
-            Dst
+            分布式系统
         </span>
     
         <span class="sidebar-category-name" data-categories="算法">
@@ -1541,9 +1619,24 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
             算法
         </span>
     
+        <span class="sidebar-category-name" data-categories="Dst">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Dst
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="分布式数据库">
+            <span class="iconfont-archer">&#xe60a;</span>
+            分布式数据库
+        </span>
+    
         <span class="sidebar-category-name" data-categories="软件工程">
             <span class="iconfont-archer">&#xe60a;</span>
             软件工程
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="产品设计">
+            <span class="iconfont-archer">&#xe60a;</span>
+            产品设计
         </span>
     
         <span class="sidebar-category-name" data-categories="随笔系列">
@@ -1559,11 +1652,6 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
         <span class="sidebar-category-name" data-categories="计算机体系结构">
             <span class="iconfont-archer">&#xe60a;</span>
             计算机体系结构
-        </span>
-    
-        <span class="sidebar-category-name" data-categories="分布式数据库">
-            <span class="iconfont-archer">&#xe60a;</span>
-            分布式数据库
         </span>
     
     </div>
@@ -1583,7 +1671,9 @@ ES算法设计的核心就是如何对这些参数进行调整，尤其是步长
 </script>
 
         <!-- main func -->
-        <script src="/scripts/main.js"></script>
+        <script src="/scripts/main.js?v="></script>
+        <!-- dark mode -->
+        <script src="/scripts/dark.js?v="></script>
         <!-- fancybox -->
         <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
         <!-- algolia -->

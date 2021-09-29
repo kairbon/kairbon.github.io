@@ -9,7 +9,6 @@
 
 
 
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -192,14 +191,14 @@
     }
 </style>
 
-    <link rel="preload" href="/css/style.css?v=202107" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="/css/dark.css?v=202107" as="style">
-    <link rel="stylesheet" href="/css/mobile.css?v=202107" media="(max-width: 980px)">
+    <link rel="preload" href="/css/style.css?v=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/dark.css?v=" as="style">
+    <link rel="stylesheet" href="/css/mobile.css?v=" media="(max-width: 960px)">
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script">
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
-    <link rel="preload" href="/scripts/main.js?v=202107" as="script">
-    <link rel="preload" href="/scripts/dark.js?v=202107" as="script">
+    <link rel="preload" href="/scripts/main.js?v=" as="script">
+    <link rel="preload" href="/scripts/dark.js?v=" as="script">
     <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
     <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
     <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/js/all.min.js" data-auto-replace-svg="nest"></script>
@@ -209,7 +208,8 @@
     
     <!-- 谷歌统计  -->
     
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Kairbon's Blog" type="application/atom+xml">
+</head>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script type="text/javascript">
@@ -250,8 +250,6 @@
     
 </header>
 
-        <!-- dark mode -->
-        <script src="/scripts/dark.js"></script>
         <!-- fixed footer -->
         <footer class="footer-fixed">
     <!-- back to top button -->
@@ -268,6 +266,7 @@
 
         <!-- wrapper -->
         <div class="wrapper">
+            <div class="background-holder"></div>
             <div class="site-intro" style="
 
 
@@ -431,21 +430,89 @@
             
         
         <article class="index-post">
-            <a class="abstract-title" href="/2021/05/11/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-%E7%AE%80%E4%BB%8B/">
+            <a class="abstract-title" href="/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Partition%E5%92%8CStoreServer/">
                 
-                <span class="abstract-title-text">基于Raft协议的NoSQL数据库的设计和实现（1）-简介</span>
+                <span class="abstract-title-text">基于Raft协议的NoSQL数据库的设计和实现（5）-Partition和StoreServer</span>
             </a>
             <div class="abstract-content">
-                基于Raft协议的NoSQL数据库的设计和实现1. 论文简介近些年来，随着大数据业务和巨型Web网站的增多，如何存储和管理各种数据成为了各大公司棘手的难题。为了存储日益增加的用户个人数据和业务数据，能够灵活简单使用，高可用的，使用简便的NoSQL数据库在工业界的使用越来越多。本课题提出了一种基于Raft一致性协议的内存式NoSQL数据库（下称DistKV），并且支持表结构。本课题对当前NoSQL数据库使用上因为架构设计导致的丢数据，不可用，性能瓶颈等问题进行了探讨和优化，并且尤其对于大数据存储场景做出专项优化。
-
-设计实现DistKV的基本架构，考虑横向扩展，表结构存储等基本需求。
-
-设...
+                基于Raft协议的NoSQL数据库的设计和实现-Partition和StoreServer在前文中，已经简单介绍了DistKV关于Partition和Store Server的部分内容。而这部分我们主要将我们在CAP方面的妥协。讲述为什么DistKV的一致性强于Redis，性能弱于Redis。
+1. 一致性首先在讲一致性前，先说明我们对比的维度。在通常用户使用kv的增删查改过程中，涉及到同时读，先写后读，先读后写，写后写，在分布式环境下，是否能够保持时序一致。
+通常情况下，大部分公司使用的是Redis Sentinel 模式，普通的主从备份，订阅发布的模式由于主节点一旦宕机就会导致不可用...
             </div>
             <div class="abstract-post-meta">
                 <!-- date -->
                 <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/05/11</span>
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/05/21</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="分布式系统">分布式系统</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2021/05/17/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Architecture/">
+                
+                <span class="abstract-title-text">基于Raft协议的NoSQL数据库的设计和实现（4）-Architecture</span>
+            </a>
+            <div class="abstract-content">
+                基于Raft协议的NoSQL数据库的设计和实现-ArchitectureDistKV有着独特的架构，这使得它在一致性方面的能力尤其出色。如图一
+
+图一 DistKV 分布式架构
+
+1. Store Server在DistKV中，将存储的数据分为无数可横向扩展的Partition，每组Partitation内部都保留着与其他Partition不同的数据。因为每个Partition都保存着唯一的一份数据，因此需要一些容灾策略来保证数据的可用性。我们采用一组Raft集群来做到这点，每当有DML来修改此分片的数据状态时，Raft将会把操作同步执行到每一个机器上。
+1.1 数据模型因为DistKV...
+            </div>
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/05/17</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="分布式系统">分布式系统</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2021/05/17/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Raft/">
+                
+                <span class="abstract-title-text">基于Raft协议的NoSQL数据库的设计和实现（3）-Raft</span>
+            </a>
+            <div class="abstract-content">
+                基于Raft协议的NoSQL数据库的设计和实现-Raft1.  Raft的历史所有共识算法都是由一个基本的问题出发的，就是拜占庭将军问题：拜占庭将军问题是一个协议问，拜占庭帝国军队的将军们必须全体一致的决定是否攻击某一支敌军。问题是这些将军在地理上是分隔开来的，并且将军中存在叛徒。叛徒可以任意行动以达到以下目标：欺骗某些将军采取进攻行动；促成一个不是所有将军都同意的决定，如当将军们不希望进攻时促成进攻行动；或者迷惑某些将军，使他们无法做出决定。如果叛徒达到了这些目的之一，则任何攻击行动的结果都是注定要失败的，只有完全达成一致的努力才能获得胜利。
+拜占庭假设是对现实世界的模型化，由于硬件错...
+            </div>
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/05/17</span>
                 </div>
                 <!-- tags -->
                 
@@ -473,6 +540,42 @@
             </a>
             <div class="abstract-content">
                 基于Raft协议的NoSQL数据库的设计和实现-History1. 分布式存储系统传统的集中式存储，主要采用存储区域网络（Storage Area Network，简称SAN）和网络附属存储（Network Attached Storage，简称NAS）。但是随着企业业务的高速发展和存储规模的扩大，这些传统集中式存储逐渐暴露出了维护成本高昂，可用性不高，热点等许多问题，除此之外，因为存储是集中式的方式，所以如果宕机，那么依赖它的一切服务都将会出现问题。当然解决这些可用性问题，业界也有许多方式。从硬件层面的有通过使用RAID，ZFS等技术来防止单磁盘故障导致的不可用，还有比如建设专用的存储...
+            </div>
+            <div class="abstract-post-meta">
+                <!-- date -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/05/11</span>
+                </div>
+                <!-- tags -->
+                
+                    <div class= abstract-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="分布式系统">分布式系统</a>
+    
+</div>
+
+                
+            </div>
+        </article>
+        <div class="index-post-divider"></div>
+    
+        
+        
+        
+            
+        
+        <article class="index-post">
+            <a class="abstract-title" href="/2021/05/11/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-%E7%AE%80%E4%BB%8B/">
+                
+                <span class="abstract-title-text">基于Raft协议的NoSQL数据库的设计和实现（1）-简介</span>
+            </a>
+            <div class="abstract-content">
+                基于Raft协议的NoSQL数据库的设计和实现1. 论文简介近些年来，随着大数据业务和巨型Web网站的增多，如何存储和管理各种数据成为了各大公司棘手的难题。为了存储日益增加的用户个人数据和业务数据，能够灵活简单使用，高可用的，使用简便的NoSQL数据库在工业界的使用越来越多。本课题提出了一种基于Raft一致性协议的内存式NoSQL数据库（下称DistKV），并且支持表结构。本课题对当前NoSQL数据库使用上因为架构设计导致的丢数据，不可用，性能瓶颈等问题进行了探讨和优化，并且尤其对于大数据存储场景做出专项优化。
+
+设计实现DistKV的基本架构，考虑横向扩展，表结构存储等基本需求。
+
+设...
             </div>
             <div class="abstract-post-meta">
                 <!-- date -->
@@ -672,119 +775,10 @@ RocketMQ分布式架构RocketMQ的分布式架构挺有特点的，抛开nameser
         </article>
         <div class="index-post-divider"></div>
     
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2019/12/19/Dst-Server%E5%AE%9E%E7%8E%B0WorkerPool%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7/">
-                
-                <span class="abstract-title-text">Dst-Server实现WorkerPool的必要性思考</span>
-            </a>
-            <div class="abstract-content">
-                前言​    （本文适合对Dst项目有一定认识的人阅读）项目地址
-​    最近，我一直有一个问题，我始终没有思考明白，Dst中，Dst-Server 要采用WorkerPool的模型去进行数据操作的必要性有多大，因为从实现角度而言，Dst所采用的DRPC是基于Netty的。对于Netty来说，他的Worker线程池完全可以复用。比如加一个ThreadLocal的变量，也就是Shard。按照架构设计的话也是没有问题的，而且Netty的Worker线程中也有BlockingQueue，这样对一个Shard的操作也是不会出现冲突的情况，会按照入队的顺序去执行相应的操作。所以从实现角度来说说不...
-            </div>
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/12/19</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="分布式系统">分布式系统</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2019/07/23/%E5%B8%B8%E7%94%A8%E5%B8%B8%E5%BF%98%E7%9A%84git%E5%91%BD%E4%BB%A4/">
-                
-                <span class="abstract-title-text">常用常忘的git命令</span>
-            </a>
-            <div class="abstract-content">
-                最近一直在使用git团伙作案（误
-所以记录一下常用常忘的一些命令
-删除分支　　1 删除本地分支： git branch -d dev
-　　2 如果删除不了可以强制删除，git branch -D dev
-　　3 有必要的情况下，删除远程分支：git push origin –delete dev
-
-            </div>
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/23</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="git">git</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
-        
-        
-        
-            
-        
-        <article class="index-post">
-            <a class="abstract-title" href="/2019/07/20/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91MongoDB%EF%BC%88Windows%EF%BC%89/">
-                
-                <span class="abstract-title-text">如何编译MongoDB（Windows）</span>
-            </a>
-            <div class="abstract-content">
-                以下资料均来自官网或源代码的说明文件
-MongoDB 是一款基于文档的通用分布式数据库
-  由 C++ 语言编写，MongoDB 是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。
-
-如何编译？
-  不说废话，直接开始上手。首先其官网网址为https://www.mongodb.com/    点击try free即可下载其源码和对应平台二进制    官网server版最新为4.2.0    但github上有更新的版本https://github.com/mongodb    通过git clone即可。目录如下    根据github上的r...
-            </div>
-            <div class="abstract-post-meta">
-                <!-- date -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/20</span>
-                </div>
-                <!-- tags -->
-                
-                    <div class= abstract-tags >
-    
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="软件工程">软件工程</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags="分布式数据库">分布式数据库</a>
-    
-</div>
-
-                
-            </div>
-        </article>
-        <div class="index-post-divider"></div>
-    
     <!-- paginator  -->
     
         <nav class="page-nav">
-            <a class="extend prev" rel="prev" href="/archives/">&lt; PREV</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/3/">NEXT &gt;</a>
+            <a class="extend prev" rel="prev" href="/archives/">&lt; PREV</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="page-number" href="/archives/page/4/">4</a><a class="extend next" rel="next" href="/archives/page/3/">NEXT &gt;</a>
         </nav>
     
 </main>
@@ -1035,7 +1029,48 @@ MongoDB 是一款基于文档的通用分布式数据库
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1266,7 +1301,7 @@ MongoDB 是一款基于文档的通用分布式数据库
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 30
+        Total : 33
         </div>
         <!-- search  -->
         
@@ -1282,20 +1317,38 @@ MongoDB 是一款基于文档的通用分布式数据库
             
         
         <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span>
+            <a class="archive-post-title" href="/2021/09/12/%E4%BE%9B%E5%BA%94%E9%93%BE%E7%AE%80%E6%98%93%E4%BA%A7%E5%93%81%E8%AE%BE%E8%AE%A1/">供应链简易产品设计（PRD）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span>
+            <a class="archive-post-title" href="/2021/08/23/Disrupoter%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/">Disrupoter应用实践</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span>
+            <a class="archive-post-title" href="/2021/08/15/Hbase%E5%AD%A6%E4%B9%A0/">Hbase学习1——从论文讲起（还没搞完）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/14</span>
+            <a class="archive-post-title" href="/2021/08/14/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%842/">思考自己能做到的（2）梦的张力——小张（写了一点点）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
             <span class="archive-post-date">08/11</span>
             <a class="archive-post-title" href="/2021/08/11/%E6%AF%8F%E6%97%A5%E6%89%93%E5%8D%A1/">每日打卡</a>
         </li>
     
         
         <li class="archive-post-item">
-            <span class="archive-post-date">08/11</span>
-            <a class="archive-post-title" href="/2021/08/11/Hbase%E5%AD%A6%E4%B9%A0/">Hbase学习（在总结了在总结了）</a>
-        </li>
-    
-        
-        <li class="archive-post-item">
             <span class="archive-post-date">08/08</span>
-            <a class="archive-post-title" href="/2021/08/08/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%84%EF%BC%881%EF%BC%89/">思考自己能做到的（1）开篇（8.11 update）</a>
+            <a class="archive-post-title" href="/2021/08/08/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%841/">思考自己能做到的（1）开篇（8.11 update）</a>
         </li>
     
         
@@ -1343,13 +1396,13 @@ MongoDB 是一款基于文档的通用分布式数据库
         
         <li class="archive-post-item">
             <span class="archive-post-date">05/11</span>
-            <a class="archive-post-title" href="/2021/05/11/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-%E7%AE%80%E4%BB%8B/">基于Raft协议的NoSQL数据库的设计和实现（1）-简介</a>
+            <a class="archive-post-title" href="/2021/05/11/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-History/">基于Raft协议的NoSQL数据库的设计和实现（2）-History</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">05/11</span>
-            <a class="archive-post-title" href="/2021/05/11/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-History/">基于Raft协议的NoSQL数据库的设计和实现（2）-History</a>
+            <a class="archive-post-title" href="/2021/05/11/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-%E7%AE%80%E4%BB%8B/">基于Raft协议的NoSQL数据库的设计和实现（1）-简介</a>
         </li>
     
         
@@ -1445,13 +1498,13 @@ MongoDB 是一款基于文档的通用分布式数据库
         
         <li class="archive-post-item">
             <span class="archive-post-date">07/13</span>
-            <a class="archive-post-title" href="/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/">Nginx集群conf文件</a>
+            <a class="archive-post-title" href="/2019/07/13/GA-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95-%E6%A6%82%E5%BF%B5%E7%90%86%E8%A7%A3/">GA(遗传算法)概念理解</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">07/13</span>
-            <a class="archive-post-title" href="/2019/07/13/GA-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95-%E6%A6%82%E5%BF%B5%E7%90%86%E8%A7%A3/">GA(遗传算法)概念理解</a>
+            <a class="archive-post-title" href="/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/">Nginx集群conf文件</a>
         </li>
     
         
@@ -1484,9 +1537,9 @@ MongoDB 是一款基于文档的通用分布式数据库
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
         
-            <span class="sidebar-tag-name" data-tags="分布式系统">
+            <span class="sidebar-tag-name" data-tags="分布式计算">
                 <span class="iconfont-archer">&#xe606;</span>
-                分布式系统
+                分布式计算
             </span>
         
             <span class="sidebar-tag-name" data-tags="Robocup3D">
@@ -1494,14 +1547,19 @@ MongoDB 是一款基于文档的通用分布式数据库
                 Robocup3D
             </span>
         
-            <span class="sidebar-tag-name" data-tags="初学者">
+            <span class="sidebar-tag-name" data-tags="分布式系统">
                 <span class="iconfont-archer">&#xe606;</span>
-                初学者
+                分布式系统
             </span>
         
             <span class="sidebar-tag-name" data-tags="软件工程">
                 <span class="iconfont-archer">&#xe606;</span>
                 软件工程
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="初学者">
+                <span class="iconfont-archer">&#xe606;</span>
+                初学者
             </span>
         
             <span class="sidebar-tag-name" data-tags="git">
@@ -1514,14 +1572,24 @@ MongoDB 是一款基于文档的通用分布式数据库
                 这就是生活
             </span>
         
-            <span class="sidebar-tag-name" data-tags="量子计算">
+            <span class="sidebar-tag-name" data-tags="项目经理">
                 <span class="iconfont-archer">&#xe606;</span>
-                量子计算
+                项目经理
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="产品经理">
+                <span class="iconfont-archer">&#xe606;</span>
+                产品经理
             </span>
         
             <span class="sidebar-tag-name" data-tags="分布式数据库">
                 <span class="iconfont-archer">&#xe606;</span>
                 分布式数据库
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="量子计算">
+                <span class="iconfont-archer">&#xe606;</span>
+                量子计算
             </span>
         
     </div>
@@ -1535,9 +1603,9 @@ MongoDB 是一款基于文档的通用分布式数据库
         <div class="sidebar-panel-categories">
     <div class="sidebar-categories-name">
     
-        <span class="sidebar-category-name" data-categories="Dst">
+        <span class="sidebar-category-name" data-categories="分布式系统">
             <span class="iconfont-archer">&#xe60a;</span>
-            Dst
+            分布式系统
         </span>
     
         <span class="sidebar-category-name" data-categories="算法">
@@ -1545,9 +1613,24 @@ MongoDB 是一款基于文档的通用分布式数据库
             算法
         </span>
     
+        <span class="sidebar-category-name" data-categories="Dst">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Dst
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="分布式数据库">
+            <span class="iconfont-archer">&#xe60a;</span>
+            分布式数据库
+        </span>
+    
         <span class="sidebar-category-name" data-categories="软件工程">
             <span class="iconfont-archer">&#xe60a;</span>
             软件工程
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="产品设计">
+            <span class="iconfont-archer">&#xe60a;</span>
+            产品设计
         </span>
     
         <span class="sidebar-category-name" data-categories="随笔系列">
@@ -1563,11 +1646,6 @@ MongoDB 是一款基于文档的通用分布式数据库
         <span class="sidebar-category-name" data-categories="计算机体系结构">
             <span class="iconfont-archer">&#xe60a;</span>
             计算机体系结构
-        </span>
-    
-        <span class="sidebar-category-name" data-categories="分布式数据库">
-            <span class="iconfont-archer">&#xe60a;</span>
-            分布式数据库
         </span>
     
     </div>
@@ -1587,7 +1665,9 @@ MongoDB 是一款基于文档的通用分布式数据库
 </script>
 
         <!-- main func -->
-        <script src="/scripts/main.js"></script>
+        <script src="/scripts/main.js?v="></script>
+        <!-- dark mode -->
+        <script src="/scripts/dark.js?v="></script>
         <!-- fancybox -->
         <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
         <!-- algolia -->
