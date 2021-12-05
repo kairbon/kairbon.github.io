@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <!-- title -->
+
+
+    
+
+<!-- keywords -->
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="author" content="Kairbon">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Kairbon">
+    
+        <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    
+    <meta name="description" content="">
+    <meta name="description" content="基于Raft协议的NoSQL数据库的设计和实现-Algorithm和Data struct1. 整体流程简介那一个KV对是如何写入我们数据库的呢？ 首先，客户端需要从dmeta上先获取全局视图，这是因为我们需要通过一致性hash算法确定我们的key要打入或从哪个partition中获取。 1.1 一致性Hash一致性哈希算法在1997年由麻省理工学院的Karger等人在解决分布式Cache中提出的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Raft协议的NoSQL数据库的设计和实现（7）-Algorithm和Data struct">
+<meta property="og:url" content="https://kairbon.github.io/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Algorithm%E5%92%8CData%20Struct/index.html">
+<meta property="og:site_name" content="Kairbon&#39;s Blog">
+<meta property="og:description" content="基于Raft协议的NoSQL数据库的设计和实现-Algorithm和Data struct1. 整体流程简介那一个KV对是如何写入我们数据库的呢？ 首先，客户端需要从dmeta上先获取全局视图，这是因为我们需要通过一致性hash算法确定我们的key要打入或从哪个partition中获取。 1.1 一致性Hash一致性哈希算法在1997年由麻省理工学院的Karger等人在解决分布式Cache中提出的">
+<meta property="og:locale">
+<meta property="og:image" content="https://kairbon.github.io/images/image-figure_algorithm_1.png">
+<meta property="og:image" content="https://kairbon.github.io/images/image-figure_algorithm_2.png">
+<meta property="og:image" content="https://kairbon.github.io/images/image-figure_algorithm_3.png">
+<meta property="og:image" content="https://kairbon.github.io/images/image-figure_algorithm_4.png">
+<meta property="og:image" content="https://kairbon.github.io/images/image-figure_algorithm_5.png">
+<meta property="article:published_time" content="2021-05-21T17:52:56.000Z">
+<meta property="article:modified_time" content="2021-12-05T09:47:52.605Z">
+<meta property="article:author" content="Kairbon">
+<meta property="article:tag" content="分布式系统">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kairbon.github.io/images/image-figure_algorithm_1.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="icon" href="/assets/favicon.ico">
+    
+    <title>基于Raft协议的NoSQL数据库的设计和实现（7）-Algorithm和Data struct · Kairbon&#39;Blog</title>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+    (function (w) {
+        'use strict'
+        // rel=preload support test
+        if (!w.loadCSS) {
+            w.loadCSS = function () {}
+        }
+        // define on the loadCSS obj
+        var rp = (loadCSS.relpreload = {})
+        // rel=preload feature support test
+        // runs once and returns a function for compat purposes
+        rp.support = (function () {
+            var ret
+            try {
+                ret = w.document.createElement('link').relList.supports('preload')
+            } catch (e) {
+                ret = false
+            }
+            return function () {
+                return ret
+            }
+        })()
+
+        // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+        // then change that media back to its intended value on load
+        rp.bindMediaToggle = function (link) {
+            // remember existing media attr for ultimate state, or default to 'all'
+            var finalMedia = link.media || 'all'
+
+            function enableStylesheet() {
+                link.media = finalMedia
+            }
+
+            // bind load handlers to enable media
+            if (link.addEventListener) {
+                link.addEventListener('load', enableStylesheet)
+            } else if (link.attachEvent) {
+                link.attachEvent('onload', enableStylesheet)
+            }
+
+            // Set rel and non-applicable media type to start an async request
+            // note: timeout allows this to happen async to let rendering continue in IE
+            setTimeout(function () {
+                link.rel = 'stylesheet'
+                link.media = 'only x'
+            })
+            // also enable media after 3 seconds,
+            // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+            setTimeout(enableStylesheet, 3000)
+        }
+
+        // loop through link elements in DOM
+        rp.poly = function () {
+            // double check this to prevent external calls from running
+            if (rp.support()) {
+                return
+            }
+            var links = w.document.getElementsByTagName('link')
+            for (var i = 0; i < links.length; i++) {
+                var link = links[i]
+                // qualify links to those with rel=preload and as=style attrs
+                if (
+                    link.rel === 'preload' &&
+                    link.getAttribute('as') === 'style' &&
+                    !link.getAttribute('data-loadcss')
+                ) {
+                    // prevent rerunning on link
+                    link.setAttribute('data-loadcss', true)
+                    // bind listeners to toggle media back
+                    rp.bindMediaToggle(link)
+                }
+            }
+        }
+
+        // if unsupported, run the polyfill
+        if (!rp.support()) {
+            // run once at least
+            rp.poly()
+
+            // rerun poly on an interval until onload
+            var run = w.setInterval(rp.poly, 500)
+            if (w.addEventListener) {
+                w.addEventListener('load', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            } else if (w.attachEvent) {
+                w.attachEvent('onload', function () {
+                    rp.poly()
+                    w.clearInterval(run)
+                })
+            }
+        }
+
+        // commonjs
+        if (typeof exports !== 'undefined') {
+            exports.loadCSS = loadCSS
+        } else {
+            w.loadCSS = loadCSS
+        }
+    })(typeof global !== 'undefined' ? global : this)
+</script>
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+
+    <link rel="preload" href="/css/style.css?v=20210823" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/dark.css?v=20210823" as="style">
+    <link rel="stylesheet" href="/css/dark.css" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="/css/mobile.css?v=20210823" media="(max-width: 960px)">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" as="script">
+    <link rel="preload" href="/scripts/main.js?v=20210823" as="script">
+    <link rel="preload" href="/scripts/dark.js?v=20210823" as="script">
+    <link rel="preload" href="/font/Oswald-Regular.ttf" as="font" crossorigin>
+    <link rel="preload" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" as="font" crossorigin>
+    <!-- algolia -->
+    
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Kairbon's Blog" type="application/atom+xml">
+</head>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ == undefined) {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js" />')
+        }
+    </script>
+    
+        <body class="post-body">
+    
+        <!-- header -->
+        <header class="header header-mobile">
+    <!-- top read progress line -->
+    <div class="header-element">
+        <div class="read-progress"></div>
+    </div>
+    <!-- sidebar menu button -->
+    <div class="header-element">
+        
+            <div class="header-sidebar-menu">
+        
+            
+                <div style="padding-left: 1px;">&#xe775;</div>
+            
+        </div>
+    </div>
+    <!-- header actions -->
+    <div class="header-actions">
+        <!-- theme mode switch button -->
+        <span class="header-theme-btn header-element">
+            <i class="fas fa-adjust"></i>
+        </span>
+        <!-- back to home page text -->
+        <span class="home-link header-element">
+            <a href=/>Kairbon'Blog.</a>
+        </span>
+    </div>
+    <!-- toggle banner for post layout -->
+    
+        
+            <div class="banner">
+        
+            <div class="blog-title header-element">
+                <a href="/">Kairbon&#39;Blog.</a>
+            </div>
+            <div class="post-title header-element">
+                <a href="#" class="post-name">基于Raft协议的NoSQL数据库的设计和实现（7）-Algorithm和Data struct</a>
+            </div>
+        </div>
+    
+</header>
+
+        <!-- fixed footer -->
+        <footer class="footer-fixed">
+    <!-- back to top button -->
+    <div class="footer-fixed-element">
+        
+            <div class="back-top back-top-hidden">
+        
+        
+            <div>&#xe639;</div>
+        
+        </div>
+    </div>
+</footer>
+
+        <!-- wrapper -->
+        <div class="wrapper">
+            <div class="site-intro" style="
+
+
+
+
+
+
+
+    height:50vh;
+
+">
+    
+    <!-- 主页  -->
+    
+        
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+                基于Raft协议的NoSQL数据库的设计和实现（7）-Algorithm和Data struct
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+                
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页 meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags="分布式系统">分布式系统</a>
+    
+</div>
+
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">4k</span>阅读时长: <span class="post-count reading-time">14 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <!-- 撰写日期 -->
+                    <span class="iconfont-archer post-intro-calander">&#xe676;</span>
+                    <span class="post-intro-time">2021/05/21</span>
+                    <!-- busuanzi -->
+                    
+                    <!-- 文章分享 -->
+                    <span class="share-wrapper">
+                        <span class="iconfont-archer share-icon">&#xe71d;</span>
+                        <span class="share-text">Share</span>
+                        <ul class="share-list">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+            <script>
+  // get user agent
+  function getBrowserVersions() {
+    var u = window.navigator.userAgent
+    return {
+      userAgent: u,
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+      iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+      iPad: u.indexOf('iPad') > -1, //是否为iPad
+      webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+      weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+      uc: u.indexOf('UCBrowser') > -1, //是否为android下的UC浏览器
+    }
+  }
+  var browser = {
+    versions: getBrowserVersions(),
+  }
+  console.log('userAgent: ' + browser.versions.userAgent)
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded')
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document
+        .getElementsByClassName('intro-title')[0]
+        .classList.add('intro-fade-in')
+      document
+        .getElementsByClassName('intro-subtitle')[0]
+        .classList.add('intro-fade-in')
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in')
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb() {
+    if (browser.versions.uc) {
+      console.log('UCBrowser')
+      fontLoaded()
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular'],
+        },
+        loading: function () {
+          // 所有字体开始加载
+          // console.log('font loading');
+        },
+        active: function () {
+          // 所有字体已渲染
+          fontLoaded()
+        },
+        inactive: function () {
+          // 字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout')
+          fontLoaded()
+        },
+        timeout: 5000, // Set the timeout to two seconds
+      })
+    }
+  }
+
+  function asyncErr() {
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0]
+    o.src = u
+    if (cb) {
+      o.addEventListener(
+        'load',
+        function (e) {
+          cb(null, e)
+        },
+        false
+      )
+    }
+    if (err) {
+      o.addEventListener(
+        'error',
+        function (e) {
+          err(null, e)
+        },
+        false
+      )
+    }
+    s.parentNode.insertBefore(o, s)
+  }
+
+  var asyncLoadWithFallBack = function (arr, success, reject) {
+    var currReject = function () {
+      reject()
+      arr.shift()
+      if (arr.length) async(arr[0], success, currReject)
+    }
+
+    async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack(
+    [
+      'https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js',
+      'https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js',
+      "/lib/webfontloader.min.js",
+    ],
+    asyncCb,
+    asyncErr
+  )
+</script>
+
+            <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+            <div class="container container-unloaded">
+                <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="基于Raft协议的NoSQL数据库的设计和实现-Algorithm和Data-struct"><a href="#基于Raft协议的NoSQL数据库的设计和实现-Algorithm和Data-struct" class="headerlink" title="基于Raft协议的NoSQL数据库的设计和实现-Algorithm和Data struct"></a>基于Raft协议的NoSQL数据库的设计和实现-Algorithm和Data struct</h2><h3 id="1-整体流程简介"><a href="#1-整体流程简介" class="headerlink" title="1. 整体流程简介"></a>1. 整体流程简介</h3><p>那一个KV对是如何写入我们数据库的呢？</p>
+<p>首先，客户端需要从dmeta上先获取全局视图，这是因为我们需要通过一致性hash算法确定我们的key要打入或从哪个partition中获取。</p>
+<h4 id="1-1-一致性Hash"><a href="#1-1-一致性Hash" class="headerlink" title="1.1 一致性Hash"></a>1.1 一致性Hash</h4><p>一致性哈希算法在1997年由麻省理工学院的Karger等人在解决分布式Cache中提出的，设计目标是为了解决因特网中的热点(Hot spot)问题，初衷和CARP十分类似。一致性哈希修正了CARP使用的简单哈希算法带来的问题，使得DHT可以在P2P环境中真正得到应用。</p>
+<p>但现在一致性hash算法在分布式系统中也得到了广泛应用，研究过memcached缓存数据库的人都知道，memcached服务器端本身不提供分布式cache的一致性，而是由客户端来提供，具体在计算一致性hash时采用如下步骤：</p>
+<ol>
+<li><p>首先求出memcached服务器（节点）的哈希值，并将其配置到0～232的圆（continuum）上。</p>
+</li>
+<li><p>然后采用同样的方法求出存储数据的键的哈希值，并映射到相同的圆上。</p>
+</li>
+<li><p>然后从数据映射到的位置开始顺时针查找，将数据保存到找到的第一个服务器上。如果超过232仍然找不到服务器，就会保存到第一台memcached服务器上。</p>
+<p><img src="/images/image-figure_algorithm_1.png" alt="figure 1"></p>
+<center>图一 一致性hash</center>
+
+<p>从上图的状态中添加一台memcached服务器。余数分布式算法由于保存键的服务器会发生巨大变化而影响缓存的命中率，但Consistent Hashing中，只有在圆（continuum）上增加服务器的地点逆时针方向的第一台服务器上的键会受到影响，如下图所示：</p>
+<p><img src="/images/image-figure_algorithm_2.png" alt="figure 2"></p>
+<center>图二 添加节点</center></li>
+</ol>
+<h4 id="1-2-DistKV的Hash流程"><a href="#1-2-DistKV的Hash流程" class="headerlink" title="1.2 DistKV的Hash流程"></a>1.2 DistKV的Hash流程</h4><p>一致性Hash的流程比较简单，但对于大数据存储来说，是有些不可接受的。在数据分片情况下，每一个Partition就代表着Hash环上的一个节点，如果采用传统的一致性Hash算法，一旦加入一个新的节点（Partition），那么那当用户get一个key的时候，因为之前这个key可能是被顺时针顺延打了节点4上面，但当新加入一个节点5时key就会打到节点5上，而很明显，这时候节点5并没有这些数据。</p>
+<p>不过也不是没有办法去忽略这些影响，我们可以采用rehash，让受影响的那部分重新hash打到新的节点5上。</p>
+<ol>
+<li>首先所有Partition通过心跳从dmeta中获取全局视图。发现有新节点在hash环中，Partition4根据Partition5的位置判断得出自己需要将一部分数据迁移至Partition5.</li>
+<li>Partition4中的follow节点中的建立对Partition5 leader的连接，并且对内部所有的kv在新的hash环上进行rehash，筛选出需要提交给Partition5的kv。</li>
+<li>Partition4中的follow节点以原子的形式将每一个kv提交给Partition5.</li>
+</ol>
+<p>但是很明显，这个过程是一个很耗时的操作，会降低可用性（在kv转移的时候，这些kv是不可用的），并且在现实情况中，运行时横向扩展是不频繁的操作，一般项目构建初期，就会设计好预计所需要的数量级大小，因此为了可用性考虑，我们将这种操作做了进一步优化。</p>
+<ol>
+<li>当新Partition加入集群时，先不进行任何操作，在dmeta接受其心跳后，会增加一个hash环，和之前的hash环同时保存。</li>
+<li>提醒所有客户端全局视图有更新，客户端拉取最新的全局视图。</li>
+<li>客户端遍历同时使用多个hash环运行一致性hash算法，如果得到的结果不一致，就向两个不同的partition同时发起请求。如果这个请求是写请求，则只需要向最新的hash环提交。</li>
+</ol>
+<p>这种方式是我们通过实践观察得出，大多数用户其实没有运行时扩容的需求，并且一般运行时更需要可用性，对于用户来说，延迟因为是并行执行，因此也不会出现过大的增幅，不过我们也未在更大数据量和并发量上面进行测试，但预计可以接受。</p>
+<h3 id="2-单机存储引擎"><a href="#2-单机存储引擎" class="headerlink" title="2. 单机存储引擎"></a>2. 单机存储引擎</h3><p>在数据库领域，一般性能优化一方面在于分布式架构，另一方面就在于单机存储引擎，我们目前在使用的就是JDK所提供的ConcurrentSkipListMap，虽然能够提供了排序的能力（为支持大数据表做支撑），但是明显对于一般场景下，这种其实是没有必要的，因此我们也提供了一个高效的hashMap实现，这种专用于不需要table服务，但能很明显提高性能。</p>
+<h4 id="2-1-表结构的支持"><a href="#2-1-表结构的支持" class="headerlink" title="2.1 表结构的支持"></a>2.1 表结构的支持</h4><p>这里我们参考的是TIDB对Table的实现，详细可以看引用页TIDB的论文，首先假设我们有这样一个表的定义：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">User</span> &#123;</span><br><span class="line">	ID <span class="type">int</span>,</span><br><span class="line">	Name <span class="type">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	Role <span class="type">varchar</span>(<span class="number">20</span>),</span><br><span class="line">	Age <span class="type">int</span>,</span><br><span class="line">	<span class="keyword">PRIMARY</span> KEY (ID),</span><br><span class="line">	Key idxAge (age)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>SQL 和 KV 结构之间存在巨大的区别，那么如何能够方便高效地进行映射，就成为一个很重要的问题。一个好的映射方案必须有利于对数据操作的需求。那么我们先看一下对数据的操作有哪些需求，分别有哪些特点。</p>
+<p>对于一个 Table 来说，需要存储的数据包括三部分：</p>
+<ol>
+<li>表的元信息</li>
+<li>Table 中的 Row</li>
+<li>索引数据</li>
+</ol>
+<p>表的元信息可以通过专门的冗余数据结构实现，这里不过多展开，对于 Row，可以选择行存或者列存，这两种各有优缺点。我们采用的是行存储的方式。</p>
+<p>分析完需要存储的数据的特点，我们再看看对这些数据的操作需求，主要考虑 Insert/Update/Delete/Select 这四种语句。</p>
+<p>对于 Insert 语句，需要将 Row 写入 KV，并且建立好索引数据。</p>
+<p>对于 Update 语句，需要将 Row 更新的同时，更新索引数据（如果有必要）。</p>
+<p>对于 Delete 语句，需要在删除 Row 的同时，将索引也删除。</p>
+<p>上面三个语句处理起来都很简单。对于 Select 语句，情况会复杂一些。首先我们需要能够简单快速地读取一行数据，所以每个 Row 需要有一个 ID （显示或隐式的 ID）。其次可能会读取连续多行数据，比如 <code>Select * from user;</code>。最后还有通过索引读取数据的需求，对索引的使用可能是点查或者是范围查询。查询的时候有两种模式，一种是点查，比如通过 Primary Key 或者 Unique Key 的等值条件进行查询，如 <code>select name from user where id=1;</code> ，这种需要通过索引快速定位到某一行数据；另一种是 Range 查询，如 <code>select name from user where age &gt; 30 and age &lt; 35;</code>，这个时候需要通过<code>idxAge</code>索引查询 age 在 30 和 35 之间的那些数据。Index 还分为 Unique Index 和 非 Unique Index，这两种都需要支持。</p>
+<p>大致的需求已经分析完了，因为我们有一个Partition内有序的分布式 Key-Value 引擎。这一点重要，可以帮助我们解决不少问题。比如对于快速获取一行数据，假设我们能够构造出某一个或者某几个 Key，定位到这一行，我们就能利用Store Server提供的 Seek 方法快速定位到这一行数据所在位置。再比如对于扫描全表的需求，如果能够映射为一个 Key 的 Range，从 StartKey 扫描到 EndKey，那么就可以简单的通过这种方式获得全表数据。操作 Index 数据也是类似的思路。</p>
+<p>DistKV 对每个表分配一个 TableID，每一个索引都会分配一个 IndexID，每一行分配一个 RowID（如果表有整数型的 Primary Key，那么会用 Primary Key 的值当做 RowID），其中 TableID 在整个集群内唯一，IndexID/RowID 在表内唯一，这些 ID 都是 int64 类型。</p>
+<p>每行数据按照如下规则进行编码成 Key-Value pair：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Key: tablePrefix&#123;tableID&#125;_recordPrefixSep&#123;rowID&#125;</span><br><span class="line">Value: [col1, col2, col3, col4]</span><br></pre></td></tr></table></figure>
+
+<p>其中 Key 的 <code>tablePrefix</code>/<code>recordPrefixSep</code> 都是特定的字符串常量，用于在 KV 空间内区分其他数据。</p>
+<p>对于 Index 数据，会按照如下规则编码成 Key-Value pair：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Key: tablePrefix&#123;tableID&#125;_indexPrefixSep&#123;indexID&#125;_indexedColumnsValue</span><br><span class="line">Value: rowID</span><br></pre></td></tr></table></figure>
+
+<p>Index 数据还需要考虑 Unique Index 和非 Unique Index 两种情况，对于 Unique Index，可以按照上述编码规则。但是对于非 Unique Index，通过这种编码并不能构造出唯一的 Key，因为同一个 Index 的 <code>tablePrefix&#123;tableID&#125;_indexPrefixSep&#123;indexID&#125;</code> 都一样，可能有多行数据的 <code>ColumnsValue</code> 是一样的，所以对于非 Unique Index 的编码做了一点调整：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Key: tablePrefix&#123;tableID&#125;_indexPrefixSep&#123;indexID&#125;_indexedColumnsValue_rowID</span><br><span class="line">Value: null</span><br></pre></td></tr></table></figure>
+
+<p>这样能够对索引中的每行数据构造出唯一的 Key。 注意上述编码规则中的 Key 里面的各种 xxPrefix 都是字符串常量，作用都是区分命名空间，以免不同类型的数据之间相互冲突，定义如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var(</span><br><span class="line">	tablePrefix     = &#x27;t&#x27;</span><br><span class="line">	recordPrefixSep = &quot;_r&quot;</span><br><span class="line">	indexPrefixSep  = &quot;_i&quot;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>因为我们在Store Server内部的SkipListMap是通过字典序排列的，因此只需要按照我们设定的方式小心写入即可。</p>
+<h4 id="2-2-Swiss-Map"><a href="#2-2-Swiss-Map" class="headerlink" title="2.2 Swiss Map"></a>2.2 Swiss Map</h4><p>上述表结构的实现其实是基于有序的存储引擎，但就如同前文所言，其实很多情况下，业务用不到table，那么我们如果采用全局hash的方式写入和读取，就会使得整体性能快上不少。</p>
+<p>这里主要参考google的swiss Map来实现，使用到了X86_64CPU所支持的SIMD指令集。</p>
+<h5 id="2-2-1-SIMD"><a href="#2-2-1-SIMD" class="headerlink" title="2.2.1 SIMD"></a>2.2.1 SIMD</h5><p>SIMD，即Single Instruction, Multiple Data，一条指令操作多个数据．是CPU基本指令集的扩展．主要用于提供fine grain parallelism，即小碎数据的并行操作．比如说图像处理，图像的数据常用的数据类型是RGB565, RGBA8888, YUV422等格式，这些格式的数据特点是一个像素点的一个分量总是用小于等于８bit的数据表示的．如果使用传统的处理器做计算，虽然处理器的寄存器是32位或是64位的，处理这些数据确只能用于他们的低８位，似乎有点浪费．如果把64位寄存器拆成８个８位寄存器就能同时完成８个操作，计算效率提升了８倍．SIMD指令的初衷就是这样的，只不过后来慢慢cover的功能越来越多．</p>
+<h4 id="2-2-2-SwissMap概述"><a href="#2-2-2-SwissMap概述" class="headerlink" title="2.2.2 SwissMap概述"></a>2.2.2 SwissMap概述</h4><p><img src="/images/image-figure_algorithm_3.png" alt="figure 3"></p>
+<center>图三 SwissMap 元数据</center>
+
+
+
+<p><img src="/images/image-figure_algorithm_4.png" alt="figure 4"></p>
+<center>图四 SwissMap指针空间</center>
+
+<p>将16个键值对划分为一组，也可以把这个组叫做桶，存放在逻辑连续的线性地址空间内。(哈希函数计算的64位哈希值的前57位)/(哈希表的容量)计算出某个key对应的桶，如果桶内存在空闲或者键值对被删除的槽位，就可以将该键值对存放在这个位置里，否则顺序存放到下一个桶内。每个槽位都有一个字节的元数据与之对应，当元数据为000000的时候，表示该槽位是空的，11111110表示该槽位上的元素被删除了，否则该槽位存在一个元素，其对应的元数据的首位为1，剩下的七位为第二个哈希函数计算出来的值。</p>
+<h5 id="2-2-2-1-为什么需要一个字节的元数据"><a href="#2-2-2-1-为什么需要一个字节的元数据" class="headerlink" title="2.2.2.1 为什么需要一个字节的元数据"></a>2.2.2.1 为什么需要一个字节的元数据</h5><p>元数据被用来快速检索，可以通过SIMD(单指令多数据)指令通过位运算快速判断组内是否存在空闲元素，或者已经满了, 以及匹配第二个哈希码计算出来的七位元数据相匹配的槽位。16 x 8 = 124bit,能够放入L1缓存，所以是缓存友好的。</p>
+<h5 id="2-2-2-2-哈希冲突"><a href="#2-2-2-2-哈希冲突" class="headerlink" title="2.2.2.2 哈希冲突"></a>2.2.2.2 哈希冲突</h5><p>哈希表通过空间换时间，只要选择的hash函数足够好，计算出来的哈希值分布均匀，那么某个元素应为哈希冲突，需要存储到下一个桶的情况应该很少。</p>
+<h5 id="2-2-2-3查询数据"><a href="#2-2-2-3查询数据" class="headerlink" title="2.2.2.3查询数据"></a>2.2.2.3查询数据</h5><ol>
+<li><p>先通过第一个函数计算出哈希值，找到桶的位置</p>
+</li>
+<li><p>然而计算第二个哈希函数，找到桶内匹配该哈希值的槽位。找不到就继续从下一个桶找，指导发现一个空的槽位或者被删除的槽位。</p>
+</li>
+<li><p>找到的槽位对应的索引就是对应键值对指针在指针数组中的索引。然后通过找到的索引值找到key，value值。</p>
+</li>
+</ol>
+<h5 id="2-2-2-4-Resize"><a href="#2-2-2-4-Resize" class="headerlink" title="2.2.2.4 Resize"></a>2.2.2.4 Resize</h5><p>当扩容过程中，我们没有必要冻结整个hashmap。假设一个hashmap的容量是64, 某个key扩容前所在桶是第28个桶，那么扩容一倍后对应的桶，可能仍然是28，也可能是92，但就只有这两种情况。在扩容过程中， 可以通过额外查询一次来确保获得值，直到扩容完成。但另一个挑战在于如果使用异步扩容，如何避免完全不用锁呢？因为如果扩容是异步的，必然由另一个线程来完成，那么resize的线程可能和执行插入，查询的线程由不同的CPU来执行，访问不同CPU的缓存。由于缓存不会立即更新到主存，主存的数据也不一定立即更新到另一个缓存，所以不同CPU会读到不一致的数据。但是如果加锁势必影响性能。</p>
+<h5 id="2-2-2-4-非堆数据存储"><a href="#2-2-2-4-非堆数据存储" class="headerlink" title="2.2.2.4 非堆数据存储"></a>2.2.2.4 非堆数据存储</h5><p>由于Java直接内存分配速度限制，频繁使用Unsafe来分配直接内存是不可取的。所以每次分配相对较大的内存块 <code>Block</code> ，并且使用 <code>BlockPool</code> 来预分配内存。 <code>Block</code> 的大小应该是内存页的倍数，这样做的原因可能有两个，一是内存对齐，二是内存不足时，swap友好。</p>
+<p><strong>1) 如何存储定长数据</strong></p>
+<p>如果数据长度已知，我们直接可以使用偏移量来定位数据所在位置，并且支持原地更新。</p>
+<p><strong>2) 如何存储变长数据</strong></p>
+<p><img src="/images/image-figure_algorithm_5.png" alt="Untitled Diagram.png"></p>
+<p>变长数据则需要额外的int类型的元数据来定位变长数据的起始位置和长度。元数据从数组的起始位置开始存，变长数据从数组的结束位置开始存，这样做的好处是我们能够很快的找到当前数组中第n个元素的起始位置。此外，第n-1个元素的起始位置减去1，就是当前元素的结束位置。如果n是第一个元素，那么当前元素的结束位置就是数组的末尾。</p>
+<p><strong>3) 内存回收</strong></p>
+<p>对于变长元素数据，由于并不总是能原地更新，以及出于效率考虑，我们更新数据的时候总是插入一个新的数据，然后修改对应的指针到指向新的数据。这时候，内存回收就会是一个问题。在这里我们可以考虑使用位图索引来记录被删除的元素，如果删除的元素过多，可以考虑合并block。具体如何合并仍然存在挑战。</p>
+
+    </article>
+    <!-- license -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://kairbon.github.io">Kairbon</a>
+            <p>原文链接：<a href="https://kairbon.github.io/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Algorithm%E5%92%8CData%20Struct/">https://kairbon.github.io/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Algorithm%E5%92%8CData%20Struct/</a>
+            <p>发表日期：<a href="https://kairbon.github.io/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Algorithm%E5%92%8CData%20Struct/">May 21st 2021, 5:52:56 pm</a>
+            <p>更新日期：<a href="https://kairbon.github.io/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Algorithm%E5%92%8CData%20Struct/">December 5th 2021, 9:47:52 am</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href="/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-DRPC/" title="基于Raft协议的NoSQL数据库的设计和实现（8）-DRPC">
+                    <div class="nextTitle">基于Raft协议的NoSQL数据库的设计和实现（8）-DRPC</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href="/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Meta%20Server/" title="基于Raft协议的NoSQL数据库的设计和实现（6）-MetaServer">
+                    <div class="prevTitle">基于Raft协议的NoSQL数据库的设计和实现（6）-MetaServer</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- comment -->
+    
+        <div class="post-comment">
+            <!-- 来必力 City 版安装代码 -->
+
+
+            
+
+            
+
+            
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
+    <script>
+        let idOption = '1621619576000'
+        
+        const gitalk = new Gitalk({
+            clientID: '2d81b6f3d288842604b0',
+            clientSecret: '88a32fba2396516c0a9b2d1b8787ec2a831b3428',
+            repo: 'kairbon.github.io',
+            owner: 'kairbon',
+            admin: "kairbon",
+            id: idOption,
+            distractionFreeMode: false,
+            createIssueManually: true,
+        })
+        gitalk.render('gitalk-container')
+    </script>
+    <noscript>为正常使用 Gitalk 评论功能，您需要激活 JavaScript</noscript>
+
+
+            <!-- utteranc评论 -->
+
+
+            <!-- partial('_partial/comment/changyan') -->
+            <!--PC版-->
+
+
+            
+            
+
+        </div>
+    
+    <!-- timeliness note -->
+    <!-- idea from: https://hexo.fluid-dev.com/posts/hexo-injector/#%E6%96%87%E7%AB%A0%E6%97%B6%E6%95%88%E6%80%A7%E6%8F%90%E7%A4%BA -->
+    
+        <script>
+            (function () {
+                const time = document.getElementsByClassName('post-intro-time')[0]
+                const post = document.getElementsByTagName("article")[0]
+                if (time === undefined || post === undefined) {
+                    return
+                }
+
+                const pubTime = new Date(time.innerText)
+                const now = Date.now()
+                const interval = parseInt(now - pubTime)
+                const days = parseInt(interval / 86400000)
+                const outdated_threshold = parseInt(20)
+                if (interval > outdated_threshold * 24 * 3600 * 1000) {
+                    post.innerHTML = '<div class="note note-warning">' +
+                    `<div class="title">文章时效性提示</div><p>这是一篇发布于 ${days} 天前的文章，部分信息可能已发生改变，请注意甄别。` +
+                    '</p></div>' + post.innerHTML;
+                }
+            })();
+        </script>
+    
+    <!-- Mathjax -->
+    
+</main>
+
+                <!-- profile -->
+                
+            </div>
+            <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+        <div class="social">
+            
+    
+        
+            
+                <a href="mailto:wangkai31415926@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/kairbon" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                    
+                    <img class="profile-qr" src="/assets/wechat.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
+            
+        
+    
+
+
+        </div>
+    
+    <!-- footer  -->
+    <div class="copyright">
+        <span id="hexo-power">著作权 <a  target="_blank">Kairbon</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">email <a  target="_blank">wangkai31415926@gmail.com</a></span>
+    </div>
+    <!-- website approve for Chinese user -->
+    
+    <!-- 不蒜子  -->
+    	
+</footer>
+
+        </div>
+        <!-- toc -->
+        
+            <div class="toc-wrapper toc-wrapper-loding" style=
+
+
+
+
+
+
+
+    top:50vh;
+
+>
+                <div class="toc-catalog">
+                    <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+                </div>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Algorithm%E5%92%8CData-struct"><span class="toc-number">1.</span> <span class="toc-text">基于Raft协议的NoSQL数据库的设计和实现-Algorithm和Data struct</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">1. 整体流程简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-%E4%B8%80%E8%87%B4%E6%80%A7Hash"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1 一致性Hash</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-DistKV%E7%9A%84Hash%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2 DistKV的Hash流程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%8D%95%E6%9C%BA%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-number">1.2.</span> <span class="toc-text">2. 单机存储引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-%E8%A1%A8%E7%BB%93%E6%9E%84%E7%9A%84%E6%94%AF%E6%8C%81"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 表结构的支持</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-Swiss-Map"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 Swiss Map</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-1-SIMD"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">2.2.1 SIMD</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-SwissMap%E6%A6%82%E8%BF%B0"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.2.2 SwissMap概述</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-2-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E4%B8%80%E4%B8%AA%E5%AD%97%E8%8A%82%E7%9A%84%E5%85%83%E6%95%B0%E6%8D%AE"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">2.2.2.1 为什么需要一个字节的元数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-2-2-%E5%93%88%E5%B8%8C%E5%86%B2%E7%AA%81"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">2.2.2.2 哈希冲突</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-2-3%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">2.2.2.3查询数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-2-4-Resize"><span class="toc-number">1.2.3.4.</span> <span class="toc-text">2.2.2.4 Resize</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-2-4-%E9%9D%9E%E5%A0%86%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8"><span class="toc-number">1.2.3.5.</span> <span class="toc-text">2.2.2.4 非堆数据存储</span></a></li></ol></li></ol></li></ol></li></ol>
+            </div>
+        
+        <!-- sidebar -->
+        <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+        <div class="sidebar-panel-archives">
+    <!-- 在 ejs 中将 archive 按照时间排序 -->
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 35
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+        
+            
+            
+            <div class="archive-year"> 2021 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/11</span>
+            <a class="archive-post-title" href="/2021/11/11/Broker/">关于Broker的二三事</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/14</span>
+            <a class="archive-post-title" href="/2021/10/14/%E6%9C%AA%E6%9D%A5Faas%E7%9A%84%E6%80%9D%E8%80%83/">未来Faas的思考</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span>
+            <a class="archive-post-title" href="/2021/09/12/%E4%BE%9B%E5%BA%94%E9%93%BE%E7%AE%80%E6%98%93%E4%BA%A7%E5%93%81%E8%AE%BE%E8%AE%A1/">供应链简易产品设计（PRD）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/23</span>
+            <a class="archive-post-title" href="/2021/08/23/Disrupoter%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/">Disrupoter应用实践</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/15</span>
+            <a class="archive-post-title" href="/2021/08/15/Hbase%E5%AD%A6%E4%B9%A0/">Hbase学习1——从论文讲起（还没搞完）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/14</span>
+            <a class="archive-post-title" href="/2021/08/14/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%842/">思考自己能做到的（2）梦的张力——小张（写了一点点）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/11</span>
+            <a class="archive-post-title" href="/2021/08/11/%E6%AF%8F%E6%97%A5%E6%89%93%E5%8D%A1/">每日打卡</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/08</span>
+            <a class="archive-post-title" href="/2021/08/08/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%841/">思考自己能做到的（1）开篇（8.11 update）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/01</span>
+            <a class="archive-post-title" href="/2021/06/01/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-API.md/">基于Raft协议的NoSQL数据库的设计和实现（9）-API</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span>
+            <a class="archive-post-title" href="/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-DRPC/">基于Raft协议的NoSQL数据库的设计和实现（8）-DRPC</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span>
+            <a class="archive-post-title" href="/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Algorithm%E5%92%8CData%20Struct/">基于Raft协议的NoSQL数据库的设计和实现（7）-Algorithm和Data struct</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span>
+            <a class="archive-post-title" href="/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Meta%20Server/">基于Raft协议的NoSQL数据库的设计和实现（6）-MetaServer</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/21</span>
+            <a class="archive-post-title" href="/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Partition%E5%92%8CStoreServer/">基于Raft协议的NoSQL数据库的设计和实现（5）-Partition和StoreServer</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/17</span>
+            <a class="archive-post-title" href="/2021/05/17/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Architecture/">基于Raft协议的NoSQL数据库的设计和实现（4）-Architecture</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/17</span>
+            <a class="archive-post-title" href="/2021/05/17/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Raft/">基于Raft协议的NoSQL数据库的设计和实现（3）-Raft</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/11</span>
+            <a class="archive-post-title" href="/2021/05/11/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-History/">基于Raft协议的NoSQL数据库的设计和实现（2）-History</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/11</span>
+            <a class="archive-post-title" href="/2021/05/11/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-%E7%AE%80%E4%BB%8B/">基于Raft协议的NoSQL数据库的设计和实现（1）-简介</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span>
+            <a class="archive-post-title" href="/2021/03/14/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-2pc-3pc/">分布式事务-2pc,3pc</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/08</span>
+            <a class="archive-post-title" href="/2021/02/08/RocketMQ%E8%87%AA%E5%AD%A6/">RocketMQ自学（对比kafka）---旧文章搬运</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/21</span>
+            <a class="archive-post-title" href="/2021/01/21/%E4%BB%8E996%E4%B8%AD%E6%80%9D%E8%80%83%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF/">从996中思考的一些东西</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2020 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">08/30</span>
+            <a class="archive-post-title" href="/2020/08/30/%E8%87%AA%E5%B7%B1%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%AAflag/">自己的一些个flag</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/13</span>
+            <a class="archive-post-title" href="/2020/01/13/The-Case-Against-Quantum-Computing%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/">The Case Against Quantum Computing阅读报告</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
+            <div class="archive-year"> 2019 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/19</span>
+            <a class="archive-post-title" href="/2019/12/19/Dst-Server%E5%AE%9E%E7%8E%B0WorkerPool%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7/">Dst-Server实现WorkerPool的必要性思考</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/23</span>
+            <a class="archive-post-title" href="/2019/07/23/%E5%B8%B8%E7%94%A8%E5%B8%B8%E5%BF%98%E7%9A%84git%E5%91%BD%E4%BB%A4/">常用常忘的git命令</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/20</span>
+            <a class="archive-post-title" href="/2019/07/20/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91MongoDB%EF%BC%88Windows%EF%BC%89/">如何编译MongoDB（Windows）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/18</span>
+            <a class="archive-post-title" href="/2019/07/18/nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%90%8Etomcat%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96%E8%AF%B7%E6%B1%82%E7%9A%84%E7%9C%9F%E5%AE%9EIP%E5%9C%B0%E5%9D%80/">nginx反向代理后tomcat如何获取请求的真实IP地址</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/18</span>
+            <a class="archive-post-title" href="/2019/07/18/%E5%BC%BA%E5%88%B6%E8%A6%86%E7%9B%96%E5%88%AB%E4%BA%BA%E7%9A%84%E5%88%86%E6%94%AF%E8%BF%9C%E7%A8%8B/">强制覆盖别人的分支远程</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/15</span>
+            <a class="archive-post-title" href="/2019/07/15/git%E4%BF%9D%E5%AD%98%E7%94%A8%E6%88%B7%E5%90%8D%E5%92%8C%E5%AF%86%E7%A0%81/">git保存用户名和密码</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/13</span>
+            <a class="archive-post-title" href="/2019/07/13/CMA-ES-%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4/">CMA-ES 算法步骤</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/13</span>
+            <a class="archive-post-title" href="/2019/07/13/GA-%E9%81%97%E4%BC%A0%E7%AE%97%E6%B3%95-%E6%A6%82%E5%BF%B5%E7%90%86%E8%A7%A3/">GA(遗传算法)概念理解</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/13</span>
+            <a class="archive-post-title" href="/2019/07/13/Nginx%E9%9B%86%E7%BE%A4conf%E6%96%87%E4%BB%B6/">Nginx集群conf文件</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/13</span>
+            <a class="archive-post-title" href="/2019/07/13/robocup3D-%E5%A6%82%E4%BD%95%E5%B0%86%E5%8F%82%E6%95%B0%E6%96%87%E4%BB%B6%E6%89%93%E5%8C%85%E4%B8%BA%E5%8A%A8%E6%80%81%E5%BA%93/">robocup3D 如何将参数文件打包为动态库</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/13</span>
+            <a class="archive-post-title" href="/2019/07/13/%E4%BC%98%E5%8C%96%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%8A%A8%E4%BD%9C%E7%9A%84CMA-ES%E7%AE%97%E6%B3%95-python%E7%89%88%E6%9C%AC%E7%9A%84api%E5%88%86%E6%9E%90/">优化机器人动作的CMA-ES算法 python版本的api分析</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/13</span>
+            <a class="archive-post-title" href="/2019/07/13/%E8%BF%9B%E5%8C%96%E7%AD%96%E7%95%A5%EF%BC%88Evolution-Strategy%EF%BC%89/">进化策略（Evolution Strategy）</a>
+        </li>
+    
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/10</span>
+            <a class="archive-post-title" href="/2019/07/10/%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AAAPP/">如何开发一个APP</a>
+        </li>
+    
+    </div>
+</div>
+
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+        
+            <span class="sidebar-tag-name" data-tags="分布式系统">
+                <span class="iconfont-archer">&#xe606;</span>
+                分布式系统
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="Robocup3D">
+                <span class="iconfont-archer">&#xe606;</span>
+                Robocup3D
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="分布式计算">
+                <span class="iconfont-archer">&#xe606;</span>
+                分布式计算
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="软件工程">
+                <span class="iconfont-archer">&#xe606;</span>
+                软件工程
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="初学者">
+                <span class="iconfont-archer">&#xe606;</span>
+                初学者
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="git">
+                <span class="iconfont-archer">&#xe606;</span>
+                git
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="这就是生活">
+                <span class="iconfont-archer">&#xe606;</span>
+                这就是生活
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="项目经理">
+                <span class="iconfont-archer">&#xe606;</span>
+                项目经理
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="产品经理">
+                <span class="iconfont-archer">&#xe606;</span>
+                产品经理
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="分布式数据库">
+                <span class="iconfont-archer">&#xe606;</span>
+                分布式数据库
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="量子计算">
+                <span class="iconfont-archer">&#xe606;</span>
+                量子计算
+            </span>
+        
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+        缺失模块，请参考主题文档进行安装配置：https://github.com/fi3ework/hexo-theme-archer#%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="分布式系统">
+            <span class="iconfont-archer">&#xe60a;</span>
+            分布式系统
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="算法">
+            <span class="iconfont-archer">&#xe60a;</span>
+            算法
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="Dst">
+            <span class="iconfont-archer">&#xe60a;</span>
+            Dst
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="分布式数据库">
+            <span class="iconfont-archer">&#xe60a;</span>
+            分布式数据库
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="软件工程">
+            <span class="iconfont-archer">&#xe60a;</span>
+            软件工程
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="产品设计">
+            <span class="iconfont-archer">&#xe60a;</span>
+            产品设计
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="随笔系列">
+            <span class="iconfont-archer">&#xe60a;</span>
+            随笔系列
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="打卡">
+            <span class="iconfont-archer">&#xe60a;</span>
+            打卡
+        </span>
+    
+        <span class="sidebar-category-name" data-categories="计算机体系结构">
+            <span class="iconfont-archer">&#xe60a;</span>
+            计算机体系结构
+        </span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+
+    </div>
+</div>
+
+        <!-- site-meta -->
+        <script>
+    var siteMeta = {
+        url: "https://kairbon.github.io",
+        root: "/",
+        author: "Kairbon"
+    }
+</script>
+
+        <!-- import experimental options here -->
+        <!-- Custom Font -->
+
+
+        <!-- main func -->
+        <script src="/scripts/main.js?v=20210823"></script>
+        <!-- dark mode -->
+        <script src="/scripts/dark.js?v=20210823"></script>
+        <!-- fancybox -->
+        <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+        <!-- algolia -->
+        
+        <!-- busuanzi -->
+        
+        <!-- CNZZ -->
+        
+        <!-- async load share.js -->
+        
+            <script src="/scripts/share.js?v=20210823" async></script>
+        
+        <!-- mermaid -->
+        
+    </body>
+</html>
