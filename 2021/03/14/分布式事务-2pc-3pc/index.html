@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://kairbon.github.io/images/pasted-10.png">
 <meta property="og:image" content="https://kairbon.github.io/images/pasted-11.png">
 <meta property="article:published_time" content="2021-03-14T11:09:56.000Z">
-<meta property="article:modified_time" content="2022-01-31T04:22:47.669Z">
+<meta property="article:modified_time" content="2022-02-10T15:08:35.125Z">
 <meta property="article:author" content="Kairbon">
 <meta property="article:tag" content="分布式系统">
 <meta name="twitter:card" content="summary">
@@ -496,23 +496,23 @@
     <article class="article-entry">
         <h2 id="分布式事务-2pc-3pc"><a href="#分布式事务-2pc-3pc" class="headerlink" title="分布式事务-2pc,3pc"></a>分布式事务-2pc,3pc</h2><p>原作者 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/qdhxhz/p/11167025.html">https://www.cnblogs.com/qdhxhz/p/11167025.html</a> </p>
 <h3 id="1-2pc-two-phase-commit"><a href="#1-2pc-two-phase-commit" class="headerlink" title="1. 2pc(two phase commit)"></a>1. 2pc(two phase commit)</h3><p>两阶段提交又称2PC,2PC是一个非常经典的强一致、中心化的原子提交协议。</p>
-<p>这里所说的中心化是指协议中有两类节点：一个是中心化协调者节点（coordinator）和N个参与者节点（partcipant）。<br>两个阶段：第一阶段：投票阶段 和第二阶段：提交&#x2F;执行阶段。<br>举例 订单服务A，需要调用 支付服务B 去支付，支付成功则处理购物订单为待发货状态，否则就需要将购物订单处理为失败状态。</p>
+<p>这里所说的中心化是指协议中有两类节点：一个是中心化协调者节点（coordinator）和N个参与者节点（partcipant）。<br>两个阶段：第一阶段：投票阶段 和第二阶段：提交/执行阶段。<br>举例 订单服务A，需要调用 支付服务B 去支付，支付成功则处理购物订单为待发货状态，否则就需要将购物订单处理为失败状态。</p>
 <p>那么看2PC阶段是如何处理的</p>
 <h4 id="1-1-第一阶段"><a href="#1-1-第一阶段" class="headerlink" title="1.1 第一阶段"></a>1.1 第一阶段</h4><p><img src="/images/pasted-9.png" alt="upload successful"><br>第一阶段主要分为3步</p>
 <p>(1) 事务询问</p>
 <p>协调者 向所有的 参与者 发送事务预处理请求，称之为Prepare，并开始等待各 参与者 的响应。</p>
 <p>(2) 执行本地事务</p>
-<p>各个 参与者 节点执行本地事务操作,但在执行完成后并不会真正提交数据库本地事务，而是先向 协调者 报告说：“我这边可以处理了&#x2F;我这边不能处理”。.</p>
+<p>各个 参与者 节点执行本地事务操作,但在执行完成后并不会真正提交数据库本地事务，而是先向 协调者 报告说：“我这边可以处理了/我这边不能处理”。.</p>
 <p>(3) 各参与者向协调者反馈事务询问的响应</p>
 <p>如果 参与者 成功执行了事务操作,那么就反馈给协调者 Yes 响应,表示事务可以执行,如果没有 参与者 成功执行事务,那么就反馈给协调者 No 响应,表示事务不可以执行。</p>
 <p>第一阶段执行完后，会有两种可能。1、所有都返回Yes. 2、有一个或者多个返回No。</p>
-<h4 id="1-2-第二阶段"><a href="#1-2-第二阶段" class="headerlink" title="1.2 第二阶段"></a>1.2 第二阶段</h4><p>第二阶段：提交&#x2F;执行阶段（成功流程）成功条件：所有参与者都返回Yes。</p>
+<h4 id="1-2-第二阶段"><a href="#1-2-第二阶段" class="headerlink" title="1.2 第二阶段"></a>1.2 第二阶段</h4><p>第二阶段：提交/执行阶段（成功流程）成功条件：所有参与者都返回Yes。</p>
 <p><img src="/images/pasted-10.png" alt="upload successful"><br>第二阶段主要分为两步</p>
 <p>​ 1)所有的参与者反馈给协调者的信息都是Yes,那么就会执行事务提交</p>
 <p>​ 协调者 向 所有参与者 节点发出Commit请求.</p>
 <p>​ 2)事务提交</p>
 <p>​ 参与者 收到Commit请求之后,就会正式执行本地事务Commit操作,并在完成提交之后释放整个事务执行期间占用的事务资源。</p>
-<h4 id="1-3-第二阶段：提交-x2F-执行阶段（异常流程）"><a href="#1-3-第二阶段：提交-x2F-执行阶段（异常流程）" class="headerlink" title="1.3 第二阶段：提交&#x2F;执行阶段（异常流程）"></a>1.3 第二阶段：提交&#x2F;执行阶段（异常流程）</h4><p>异常条件：任何一个 参与者 向 协调者 反馈了 No 响应,或者等待超时之后,协调者尚未收到所有参与者的反馈响应。</p>
+<h4 id="1-3-第二阶段：提交-执行阶段（异常流程）"><a href="#1-3-第二阶段：提交-执行阶段（异常流程）" class="headerlink" title="1.3 第二阶段：提交/执行阶段（异常流程）"></a>1.3 第二阶段：提交/执行阶段（异常流程）</h4><p>异常条件：任何一个 参与者 向 协调者 反馈了 No 响应,或者等待超时之后,协调者尚未收到所有参与者的反馈响应。</p>
 <p><img src="/images/pasted-11.png" alt="upload successful"></p>
 <p>异常流程第二阶段也分为两步</p>
 <p>1)发送回滚请求</p>
@@ -561,7 +561,7 @@
             <p>原文作者：<a href="https://kairbon.github.io">Kairbon</a>
             <p>原文链接：<a href="https://kairbon.github.io/2021/03/14/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-2pc-3pc/">https://kairbon.github.io/2021/03/14/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-2pc-3pc/</a>
             <p>发表日期：<a href="https://kairbon.github.io/2021/03/14/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-2pc-3pc/">March 14th 2021, 11:09:56 am</a>
-            <p>更新日期：<a href="https://kairbon.github.io/2021/03/14/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-2pc-3pc/">January 31st 2022, 4:22:47 am</a>
+            <p>更新日期：<a href="https://kairbon.github.io/2021/03/14/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-2pc-3pc/">February 10th 2022, 3:08:35 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -755,7 +755,7 @@
                 <div class="toc-catalog">
                     <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
                 </div>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-2pc-3pc"><span class="toc-number">1.</span> <span class="toc-text">分布式事务-2pc,3pc</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2pc-two-phase-commit"><span class="toc-number">1.1.</span> <span class="toc-text">1. 2pc(two phase commit)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1 第一阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2 第二阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%9A%E6%8F%90%E4%BA%A4-x2F-%E6%89%A7%E8%A1%8C%E9%98%B6%E6%AE%B5%EF%BC%88%E5%BC%82%E5%B8%B8%E6%B5%81%E7%A8%8B%EF%BC%89"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.3 第二阶段：提交&#x2F;执行阶段（异常流程）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-2PC%E7%BC%BA%E7%82%B9"><span class="toc-number">1.1.4.</span> <span class="toc-text">1.4 2PC缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%B8%89%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4-3PC"><span class="toc-number">1.2.</span> <span class="toc-text">2. 三阶段提交(3PC)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-CanCommit%E9%98%B6%E6%AE%B5"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 CanCommit阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-PreCommit%E9%98%B6%E6%AE%B5"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 PreCommit阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-DoCommit%E9%98%B6%E6%AE%B5"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 DoCommit阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-%E6%80%BB%E7%BB%93"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.4 总结</span></a></li></ol></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-2pc-3pc"><span class="toc-number">1.</span> <span class="toc-text">分布式事务-2pc,3pc</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2pc-two-phase-commit"><span class="toc-number">1.1.</span> <span class="toc-text">1. 2pc(two phase commit)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1 第一阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2 第二阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%9A%E6%8F%90%E4%BA%A4-%E6%89%A7%E8%A1%8C%E9%98%B6%E6%AE%B5%EF%BC%88%E5%BC%82%E5%B8%B8%E6%B5%81%E7%A8%8B%EF%BC%89"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.3 第二阶段：提交&#x2F;执行阶段（异常流程）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-2PC%E7%BC%BA%E7%82%B9"><span class="toc-number">1.1.4.</span> <span class="toc-text">1.4 2PC缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%B8%89%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4-3PC"><span class="toc-number">1.2.</span> <span class="toc-text">2. 三阶段提交(3PC)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-CanCommit%E9%98%B6%E6%AE%B5"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 CanCommit阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-PreCommit%E9%98%B6%E6%AE%B5"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 PreCommit阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-DoCommit%E9%98%B6%E6%AE%B5"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 DoCommit阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-%E6%80%BB%E7%BB%93"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.4 总结</span></a></li></ol></li></ol></li></ol>
             </div>
         
         <!-- sidebar -->
@@ -944,7 +944,22 @@
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1225,7 +1240,7 @@
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 35
+        Total : 36
         </div>
         <!-- search  -->
         
@@ -1236,13 +1251,28 @@
         
             
             
+            <div class="archive-year"> 2022 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/10</span>
+            <a class="archive-post-title" href="/2022/02/10/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%843/">思考自己能做到的（3）这段时间的反思</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
             <div class="archive-year"> 2021 </div>
             <ul class="year-list">
             
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/08</span>
-            <a class="archive-post-title" href="/2021/12/08/Disrupoter%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/">数据集成场景优化——任务编排/限流</a>
+            <a class="archive-post-title" href="/2021/12/08/%E6%95%B0%E6%8D%AE%E9%9B%86%E6%88%90%E5%9C%BA%E6%99%AF%E4%BC%98%E5%8C%96/">数据集成场景优化——任务编排/限流</a>
         </li>
     
         
@@ -1272,19 +1302,19 @@
         
         <li class="archive-post-item">
             <span class="archive-post-date">08/14</span>
-            <a class="archive-post-title" href="/2021/08/14/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%842/">思考自己能做到的（2）梦的张力——小张（写了一点点）</a>
+            <a class="archive-post-title" href="/2021/08/14/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%842/">思考自己能做到的（2）梦的张力</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">08/11</span>
-            <a class="archive-post-title" href="/2021/08/11/%E6%AF%8F%E6%97%A5%E6%89%93%E5%8D%A1/">每日打卡</a>
+            <a class="archive-post-title" href="/2021/08/11/%E6%AF%8F%E6%97%A5%E6%89%93%E5%8D%A1/">2021年每日打卡-坚持了没多久- -</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">08/08</span>
-            <a class="archive-post-title" href="/2021/08/08/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%841/">思考自己能做到的（1）开篇（8.11 update）</a>
+            <a class="archive-post-title" href="/2021/08/08/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%841/">思考自己能做到的（1）开篇</a>
         </li>
     
         
@@ -1518,14 +1548,14 @@
                 分布式数据库
             </span>
         
-            <span class="sidebar-tag-name" data-tags="分布式计算">
-                <span class="iconfont-archer">&#xe606;</span>
-                分布式计算
-            </span>
-        
             <span class="sidebar-tag-name" data-tags="量子计算">
                 <span class="iconfont-archer">&#xe606;</span>
                 量子计算
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="分布式计算">
+                <span class="iconfont-archer">&#xe606;</span>
+                分布式计算
             </span>
         
     </div>

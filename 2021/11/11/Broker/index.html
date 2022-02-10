@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://kairbon.github.io/images/kafka%E4%BD%BF%E7%94%A8zookeeper.png">
 <meta property="og:image" content="https://kairbon.github.io/images/hsf-broker.png">
 <meta property="article:published_time" content="2021-11-11T10:52:41.000Z">
-<meta property="article:modified_time" content="2022-01-31T04:22:47.669Z">
+<meta property="article:modified_time" content="2022-02-10T15:08:35.121Z">
 <meta property="article:author" content="Kairbon">
 <meta property="article:tag" content="分布式系统">
 <meta name="twitter:card" content="summary">
@@ -338,7 +338,7 @@
                 
                 
                     <div class="post-intro-read">
-                        <span>字数统计: <span class="post-count word-count">621</span>阅读时长: <span class="post-count reading-time">2 min</span></span>
+                        <span>字数统计: <span class="post-count word-count">620</span>阅读时长: <span class="post-count reading-time">2 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -496,7 +496,7 @@
     <article class="article-entry">
         <h1 id="关于Broker的二三事"><a href="#关于Broker的二三事" class="headerlink" title="关于Broker的二三事"></a>关于Broker的二三事</h1><h2 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h2><p>说起Broker其实第一次见到是在公司的一个中间件上，这个中间件使用broker的语义去创建一个服务，当时就有些疑惑。今天又在一篇技术文章中发现了这个关键字眼，遂研究之。</p>
 <h2 id="过程："><a href="#过程：" class="headerlink" title="过程："></a>过程：</h2><p>Broker在维基百科的定义如下：A broker is a person or firm who arranges transactions between a <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Purchasing">buyer</a> and a <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Sales">seller</a> for a <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Commission_(remuneration)">commission</a> when the deal is executed. A broker who also acts as a seller or as a buyer becomes a <a target="_blank" rel="noopener" href="https://en.wiktionary.org/wiki/principal">principal</a> party to the deal. Neither role should be confused with that of an <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Agent_(law)">agent</a>—one who acts on behalf of a principal party in a deal.</p>
-<p>一句话解释就是类似中间人&#x2F;中介的角色，供给方和需求方的中介。在kafka的架构中，broker是真正持有Topic的核心中的核心，因此在kafka的传统架构中，通常使用zookeeper去保证这部分的高可用性。</p>
+<p>一句话解释就是类似中间人/中介的角色，供给方和需求方的中介。在kafka的架构中，broker是真正持有Topic的核心中的核心，因此在kafka的传统架构中，通常使用zookeeper去保证这部分的高可用性。</p>
 <p><img src="/images/kafka%E6%9E%B6%E6%9E%84.png" alt="image-20211111101803924"></p>
 <p><img src="/images/kafka%E4%BD%BF%E7%94%A8zookeeper.png" alt="image-20211111101909749"></p>
 <p>可以看到，在kafka的场景中，broker不仅是一个抽象的概念（可以通过代码去操作它，描述它），也是一个相对独立的实例。（部署结构上，broker也可以独立部署去服务）</p>
@@ -521,7 +521,7 @@
             <p>原文作者：<a href="https://kairbon.github.io">Kairbon</a>
             <p>原文链接：<a href="https://kairbon.github.io/2021/11/11/Broker/">https://kairbon.github.io/2021/11/11/Broker/</a>
             <p>发表日期：<a href="https://kairbon.github.io/2021/11/11/Broker/">November 11th 2021, 10:52:41 am</a>
-            <p>更新日期：<a href="https://kairbon.github.io/2021/11/11/Broker/">January 31st 2022, 4:22:47 am</a>
+            <p>更新日期：<a href="https://kairbon.github.io/2021/11/11/Broker/">February 10th 2022, 3:08:35 pm</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -530,7 +530,7 @@
         <li class="next">
             
                 <div class="nextSlogan">Next Post</div>
-                <a href="/2021/12/08/Disrupoter%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/" title="数据集成场景优化——任务编排/限流">
+                <a href="/2021/12/08/%E6%95%B0%E6%8D%AE%E9%9B%86%E6%88%90%E5%9C%BA%E6%99%AF%E4%BC%98%E5%8C%96/" title="数据集成场景优化——任务编排/限流">
                     <div class="nextTitle">数据集成场景优化——任务编排/限流</div>
                 </a>
             
@@ -904,7 +904,22 @@
         
         
         
+        
+        
+        
+        
+        
     
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -1185,7 +1200,7 @@
     
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 35
+        Total : 36
         </div>
         <!-- search  -->
         
@@ -1196,13 +1211,28 @@
         
             
             
+            <div class="archive-year"> 2022 </div>
+            <ul class="year-list">
+            
+        
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/10</span>
+            <a class="archive-post-title" href="/2022/02/10/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%843/">思考自己能做到的（3）这段时间的反思</a>
+        </li>
+    
+        
+            
+            
+                
+                </ul>
+            
             <div class="archive-year"> 2021 </div>
             <ul class="year-list">
             
         
         <li class="archive-post-item">
             <span class="archive-post-date">12/08</span>
-            <a class="archive-post-title" href="/2021/12/08/Disrupoter%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/">数据集成场景优化——任务编排/限流</a>
+            <a class="archive-post-title" href="/2021/12/08/%E6%95%B0%E6%8D%AE%E9%9B%86%E6%88%90%E5%9C%BA%E6%99%AF%E4%BC%98%E5%8C%96/">数据集成场景优化——任务编排/限流</a>
         </li>
     
         
@@ -1232,19 +1262,19 @@
         
         <li class="archive-post-item">
             <span class="archive-post-date">08/14</span>
-            <a class="archive-post-title" href="/2021/08/14/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%842/">思考自己能做到的（2）梦的张力——小张（写了一点点）</a>
+            <a class="archive-post-title" href="/2021/08/14/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%842/">思考自己能做到的（2）梦的张力</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">08/11</span>
-            <a class="archive-post-title" href="/2021/08/11/%E6%AF%8F%E6%97%A5%E6%89%93%E5%8D%A1/">每日打卡</a>
+            <a class="archive-post-title" href="/2021/08/11/%E6%AF%8F%E6%97%A5%E6%89%93%E5%8D%A1/">2021年每日打卡-坚持了没多久- -</a>
         </li>
     
         
         <li class="archive-post-item">
             <span class="archive-post-date">08/08</span>
-            <a class="archive-post-title" href="/2021/08/08/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%841/">思考自己能做到的（1）开篇（8.11 update）</a>
+            <a class="archive-post-title" href="/2021/08/08/%E6%80%9D%E8%80%83%E8%87%AA%E5%B7%B1%E8%83%BD%E5%81%9A%E5%88%B0%E7%9A%841/">思考自己能做到的（1）开篇</a>
         </li>
     
         
@@ -1478,14 +1508,14 @@
                 分布式数据库
             </span>
         
-            <span class="sidebar-tag-name" data-tags="分布式计算">
-                <span class="iconfont-archer">&#xe606;</span>
-                分布式计算
-            </span>
-        
             <span class="sidebar-tag-name" data-tags="量子计算">
                 <span class="iconfont-archer">&#xe606;</span>
                 量子计算
+            </span>
+        
+            <span class="sidebar-tag-name" data-tags="分布式计算">
+                <span class="iconfont-archer">&#xe606;</span>
+                分布式计算
             </span>
         
     </div>
