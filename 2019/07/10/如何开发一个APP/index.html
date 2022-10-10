@@ -27,7 +27,7 @@
 <meta property="og:description" content="如何自己从零开发一个app呢？估计很多喜欢编程的人都考虑过，今天，我想把我的经验分享给大家，如何开发出一款app。里面一些专有名词我会标出。 一，app的分类  要开发一款app，首先要确定你要做的功能是什么，要在什么平台上运行等，这里就不再赘述，然后就是确定app的分类，因为这就涉及到问题的核心，我该学些什么，怎么去入门。其实，在传统软件工程，一般会把软件分成分布式和单机两种类型，下面详细说">
 <meta property="og:locale">
 <meta property="article:published_time" content="2019-07-10T21:24:14.000Z">
-<meta property="article:modified_time" content="2022-09-09T04:18:59.686Z">
+<meta property="article:modified_time" content="2022-10-10T04:23:12.456Z">
 <meta property="article:author" content="Kairbon">
 <meta property="article:tag" content="初学者">
 <meta name="twitter:card" content="summary">
@@ -212,7 +212,7 @@
     
     <!-- 谷歌统计  -->
     
-<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Kairbon's Blog" type="application/atom+xml">
+<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="Kairbon's Blog" type="application/atom+xml">
 </head>
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
@@ -493,7 +493,7 @@
         <p>  如何自己从零开发一个app呢？估计很多喜欢编程的人都考虑过，今天，我想把我的经验分享给大家，如何开发出一款app。里面一些专有名词我会标出。</p>
 <h2 id="一，app的分类"><a href="#一，app的分类" class="headerlink" title="一，app的分类"></a>一，app的分类</h2><p>  要开发一款app，首先要确定你要做的功能是什么，要在什么平台上运行等，这里就不再赘述，然后就是确定app的分类，因为这就涉及到问题的核心，我该学些什么，怎么去入门。其实，在传统软件工程，一般会把软件分成<strong>分布式</strong>和<strong>单机</strong>两种类型，下面详细说一下这两种。</p>
 <h3 id="1-单机软件"><a href="#1-单机软件" class="headerlink" title="1.单机软件"></a>1.单机软件</h3><p>  这类软件通常运行在自己的设备上，无需与软件开发商进行数据交换，或者交换的次数很少，比如单机游戏，比如自己做的小工具等，这类软件你需要对你所期望运行的设备，操作系统和开发这个这个设备上面的软件所用的语言有深入的了解，比如安卓手机，如果你想做一个围绕nfc开发的门禁卡模拟软件，首先你就得保证你手机上得有nfc功能，还得了解开发安卓app所用的语言，还得了解Android里面和硬件打交道的一些<strong>api</strong>，但目前市面上的app大部分不是这种类型的，这里就不细讲。</p>
-<h3 id="2-分布式软件（C-S架构）"><a href="#2-分布式软件（C-S架构）" class="headerlink" title="2.分布式软件（C/S架构）"></a>2.分布式软件（C/S架构）</h3><p>  这类软件通常有两个端，一个叫做客户端client，一个叫做服务端server，客户端很明显就包括了前面的单机软件所需要的所有东西，而且有一个很显著的特点就是如果你想要使用上面的一些功能，他都会要求你去联网。因为一联网，数据就与我们的<strong>服务器（服务端）</strong>得到了交换，软件开发商就可以根据得到的数据继续给你服务，比如QQ，腾讯云里面的服务器得到了你发给某个人的数据，然后再发给你想发给的人，这样一来，你的聊天记录也上传到了腾讯的服务器上，你也可以在你换了一个设备的时候浏览到你上次的聊天记录，看到这里可能就会想，我们如果要开发一个app 的话怎么去控制它把数据上传到服务器呢？        <br>   首先，你就得了解什么是服务器，也就是服务端运行的设备，简而言之，你可以把它理解为一台电脑，但它的内存和cpu要远远比pc强得多，不过他没有显示器，也没有声卡，它上面运行的一般也不是我们通常意义上讲的windows操作系统（当然也有可能），主流是运行<strong>linux</strong>操作系统，而linux操作系统又有好多种发行版本，目前大多数是采用<strong>centos</strong>，是一种没有桌面界面的操作系统，所以说如果想要入门分布式软件开发，掌握好linux是必须的。</p>
+<h3 id="2-分布式软件（C-x2F-S架构）"><a href="#2-分布式软件（C-x2F-S架构）" class="headerlink" title="2.分布式软件（C&#x2F;S架构）"></a>2.分布式软件（C&#x2F;S架构）</h3><p>  这类软件通常有两个端，一个叫做客户端client，一个叫做服务端server，客户端很明显就包括了前面的单机软件所需要的所有东西，而且有一个很显著的特点就是如果你想要使用上面的一些功能，他都会要求你去联网。因为一联网，数据就与我们的<strong>服务器（服务端）</strong>得到了交换，软件开发商就可以根据得到的数据继续给你服务，比如QQ，腾讯云里面的服务器得到了你发给某个人的数据，然后再发给你想发给的人，这样一来，你的聊天记录也上传到了腾讯的服务器上，你也可以在你换了一个设备的时候浏览到你上次的聊天记录，看到这里可能就会想，我们如果要开发一个app 的话怎么去控制它把数据上传到服务器呢？        <br>   首先，你就得了解什么是服务器，也就是服务端运行的设备，简而言之，你可以把它理解为一台电脑，但它的内存和cpu要远远比pc强得多，不过他没有显示器，也没有声卡，它上面运行的一般也不是我们通常意义上讲的windows操作系统（当然也有可能），主流是运行<strong>linux</strong>操作系统，而linux操作系统又有好多种发行版本，目前大多数是采用<strong>centos</strong>，是一种没有桌面界面的操作系统，所以说如果想要入门分布式软件开发，掌握好linux是必须的。</p>
 <h2 id="二，数据的传输"><a href="#二，数据的传输" class="headerlink" title="二，数据的传输"></a>二，数据的传输</h2><p>  上面提到如果你想要开发一个分布式app，你就得掌握和服务器打交道的方法，这里就有涉及到一个新的知识点：<strong>计算机网络</strong> 这是大学和计算机相关的专业必学的一门专业课，在计算机网络这门课中，他会讲OSI七层模型，不过一直是从下往上讲的，这对于初学者不是很友好，我的建议是，在你学习一门语言的时候，试试它网络编程的模块，比如<strong>java</strong>里面的<strong>socket</strong>，就是最顶层的东西，然后一层一层往下看，这样你就能大概理解计算机网络的运作，但如果只是看书你还是不会操作，因为网络这里最核心的点还没说到，那就是<strong>协议</strong><br>  整个网络就是建立在协议的基础上的，举个例子，在计算机间传输数据的电缆设计好了，但人们对网线插头的形状议论不休，有的人要方的，有的人要圆的，这就对计算机的设计和网线制造商提出了很大的挑战，权衡利弊，人们决定，那要不就用一样的吧，于是决定用了现在这种样式，当然这个故事是胡诌的，但里面突出了协议的重要性，如果没有一个协议作为支持，我们互相发的东西如何被机器，被写死的程序自动的识别，所以，就有了http协议等协议 ，但还是有麻烦，因为如果每做一个软件都写一个http协议的实现类，那多麻烦啊，于是聪明的人们把它封装成了一个个包，开源给了大家，而且实现方法各有不同，比如就有Java的httpclient.</p>
 <h2 id="三，server端"><a href="#三，server端" class="headerlink" title="三，server端"></a><strong>三，server端</strong></h2><p>  或许看到这里，聪明的同学已经看出来了，是啊，我们不止得搞定client的开发，我们还得搞定server的开发，因为server不可能由真人去响应 ，也来不及的啊，这时候，恭喜你已经入门了，因为已经有人为我们想到了这一点，在之前socket阶段，我们可能尝试过编写一个小型的模型，一个server绑定一个<strong>端口</strong>，一个client向一个server的<strong>ip</strong>和相应的端口发数据，server只要绑定了相应的端口，它就可以接收到client message并进行处理，当然聪明的程序员们是不可能让这种基础的工作被重复从底层实现一遍又一遍的，他们把server socket和http协议等再度进行了封装，并且做了许多<strong>自动化的工具，</strong>然后把它开源出来，这样在server开发的时候，就只需要关注具体的业务逻辑的实现，而对于从底层开始就可以不必了。这种工具被称之为<strong>web容器，</strong>比较有名的由<strong>tomcat</strong>，iis，nginx等等。<br>   但是解决了这个问题之后，我们发现我们又遇到了问题，那就是我们如何去统一的把客户端上传的数据管理起来呢？因为在实际工作中，无数的数据接踵而至，如果没有合适的解决数据存储的方法，那么无论是自己以后查询还是为用户提供服务都是很不好的，比如，假设你写的软件会把从client读入的数据传入到到一个个文件里，按照时间命名。用的时候再读取出来，这在业务量小的时候没毛病，但一旦稍微业务量大一点，自己存进去的东西占地方不说，而且除了你估计应该就没人知道这些东西在哪了吧。</p>
 <h2 id="四，数据库"><a href="#四，数据库" class="headerlink" title="四，数据库"></a>四，数据库</h2><p>  如果说应用软件的外壳是<strong>前端和后端</strong>的话，数据库就是核心，数据库的作用太重要了，它为任何操作平台提供了统一的调用方法，而且支持各种各样的调用方法，比如排序显示，搜索等除此之外还有各种复杂的数据关系，比如<strong>主键</strong>，<strong>外键</strong>等等，有了数据库，你就不用担心数据的存放了（当然前提是你要学好<strong>数据库的设计</strong>）。</p>
@@ -506,7 +506,7 @@
             <p>原文作者：<a href="https://kairbon.github.io">Kairbon</a>
             <p>原文链接：<a href="https://kairbon.github.io/2019/07/10/%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AAAPP/">https://kairbon.github.io/2019/07/10/%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AAAPP/</a>
             <p>发表日期：<a href="https://kairbon.github.io/2019/07/10/%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AAAPP/">July 10th 2019, 9:24:14 pm</a>
-            <p>更新日期：<a href="https://kairbon.github.io/2019/07/10/%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AAAPP/">September 9th 2022, 4:18:59 am</a>
+            <p>更新日期：<a href="https://kairbon.github.io/2019/07/10/%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AAAPP/">October 10th 2022, 4:23:12 am</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -695,7 +695,7 @@
                 <div class="toc-catalog">
                     <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
                 </div>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%EF%BC%8Capp%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">1.</span> <span class="toc-text">一，app的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8D%95%E6%9C%BA%E8%BD%AF%E4%BB%B6"><span class="toc-number">1.1.</span> <span class="toc-text">1.单机软件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%86%E5%B8%83%E5%BC%8F%E8%BD%AF%E4%BB%B6%EF%BC%88C-S%E6%9E%B6%E6%9E%84%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">2.分布式软件（C&#x2F;S架构）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%EF%BC%8C%E6%95%B0%E6%8D%AE%E7%9A%84%E4%BC%A0%E8%BE%93"><span class="toc-number">2.</span> <span class="toc-text">二，数据的传输</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%EF%BC%8Cserver%E7%AB%AF"><span class="toc-number">3.</span> <span class="toc-text">三，server端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%EF%BC%8C%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">4.</span> <span class="toc-text">四，数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%EF%BC%8C%E5%89%8D%E7%AB%AF"><span class="toc-number">5.</span> <span class="toc-text">五，前端</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%EF%BC%8Capp%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">1.</span> <span class="toc-text">一，app的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8D%95%E6%9C%BA%E8%BD%AF%E4%BB%B6"><span class="toc-number">1.1.</span> <span class="toc-text">1.单机软件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%86%E5%B8%83%E5%BC%8F%E8%BD%AF%E4%BB%B6%EF%BC%88C-x2F-S%E6%9E%B6%E6%9E%84%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">2.分布式软件（C&#x2F;S架构）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%EF%BC%8C%E6%95%B0%E6%8D%AE%E7%9A%84%E4%BC%A0%E8%BE%93"><span class="toc-number">2.</span> <span class="toc-text">二，数据的传输</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%EF%BC%8Cserver%E7%AB%AF"><span class="toc-number">3.</span> <span class="toc-text">三，server端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%EF%BC%8C%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">4.</span> <span class="toc-text">四，数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%EF%BC%8C%E5%89%8D%E7%AB%AF"><span class="toc-number">5.</span> <span class="toc-text">五，前端</span></a></li></ol>
             </div>
         
         <!-- sidebar -->
@@ -900,6 +900,8 @@
         
         
     
+        
+        
         
         
         
