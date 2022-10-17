@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://kairbon.github.io/images/image-figure_algorithm_4.png">
 <meta property="og:image" content="https://kairbon.github.io/images/image-figure_algorithm_5.png">
 <meta property="article:published_time" content="2021-05-21T17:52:56.000Z">
-<meta property="article:modified_time" content="2022-10-10T04:23:12.456Z">
+<meta property="article:modified_time" content="2022-10-17T04:15:32.784Z">
 <meta property="article:author" content="Kairbon">
 <meta property="article:tag" content="分布式系统">
 <meta name="twitter:card" content="summary">
@@ -539,17 +539,17 @@
 <li>索引数据</li>
 </ol>
 <p>表的元信息可以通过专门的冗余数据结构实现，这里不过多展开，对于 Row，可以选择行存或者列存，这两种各有优缺点。我们采用的是行存储的方式。</p>
-<p>分析完需要存储的数据的特点，我们再看看对这些数据的操作需求，主要考虑 Insert&#x2F;Update&#x2F;Delete&#x2F;Select 这四种语句。</p>
+<p>分析完需要存储的数据的特点，我们再看看对这些数据的操作需求，主要考虑 Insert/Update/Delete/Select 这四种语句。</p>
 <p>对于 Insert 语句，需要将 Row 写入 KV，并且建立好索引数据。</p>
 <p>对于 Update 语句，需要将 Row 更新的同时，更新索引数据（如果有必要）。</p>
 <p>对于 Delete 语句，需要在删除 Row 的同时，将索引也删除。</p>
 <p>上面三个语句处理起来都很简单。对于 Select 语句，情况会复杂一些。首先我们需要能够简单快速地读取一行数据，所以每个 Row 需要有一个 ID （显示或隐式的 ID）。其次可能会读取连续多行数据，比如 <code>Select * from user;</code>。最后还有通过索引读取数据的需求，对索引的使用可能是点查或者是范围查询。查询的时候有两种模式，一种是点查，比如通过 Primary Key 或者 Unique Key 的等值条件进行查询，如 <code>select name from user where id=1;</code> ，这种需要通过索引快速定位到某一行数据；另一种是 Range 查询，如 <code>select name from user where age &gt; 30 and age &lt; 35;</code>，这个时候需要通过<code>idxAge</code>索引查询 age 在 30 和 35 之间的那些数据。Index 还分为 Unique Index 和 非 Unique Index，这两种都需要支持。</p>
 <p>大致的需求已经分析完了，因为我们有一个Partition内有序的分布式 Key-Value 引擎。这一点重要，可以帮助我们解决不少问题。比如对于快速获取一行数据，假设我们能够构造出某一个或者某几个 Key，定位到这一行，我们就能利用Store Server提供的 Seek 方法快速定位到这一行数据所在位置。再比如对于扫描全表的需求，如果能够映射为一个 Key 的 Range，从 StartKey 扫描到 EndKey，那么就可以简单的通过这种方式获得全表数据。操作 Index 数据也是类似的思路。</p>
-<p>DistKV 对每个表分配一个 TableID，每一个索引都会分配一个 IndexID，每一行分配一个 RowID（如果表有整数型的 Primary Key，那么会用 Primary Key 的值当做 RowID），其中 TableID 在整个集群内唯一，IndexID&#x2F;RowID 在表内唯一，这些 ID 都是 int64 类型。</p>
+<p>DistKV 对每个表分配一个 TableID，每一个索引都会分配一个 IndexID，每一行分配一个 RowID（如果表有整数型的 Primary Key，那么会用 Primary Key 的值当做 RowID），其中 TableID 在整个集群内唯一，IndexID/RowID 在表内唯一，这些 ID 都是 int64 类型。</p>
 <p>每行数据按照如下规则进行编码成 Key-Value pair：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Key: tablePrefix&#123;tableID&#125;_recordPrefixSep&#123;rowID&#125;</span><br><span class="line">Value: [col1, col2, col3, col4]</span><br></pre></td></tr></table></figure>
 
-<p>其中 Key 的 <code>tablePrefix</code>&#x2F;<code>recordPrefixSep</code> 都是特定的字符串常量，用于在 KV 空间内区分其他数据。</p>
+<p>其中 Key 的 <code>tablePrefix</code>/<code>recordPrefixSep</code> 都是特定的字符串常量，用于在 KV 空间内区分其他数据。</p>
 <p>对于 Index 数据，会按照如下规则编码成 Key-Value pair：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Key: tablePrefix&#123;tableID&#125;_indexPrefixSep&#123;indexID&#125;_indexedColumnsValue</span><br><span class="line">Value: rowID</span><br></pre></td></tr></table></figure>
 
@@ -571,8 +571,8 @@
 <p><img src="/images/image-figure_algorithm_4.png" alt="figure 4"></p>
 <center>图四 SwissMap指针空间</center>
 
-<p>将16个键值对划分为一组，也可以把这个组叫做桶，存放在逻辑连续的线性地址空间内。(哈希函数计算的64位哈希值的前57位)&#x2F;(哈希表的容量)计算出某个key对应的桶，如果桶内存在空闲或者键值对被删除的槽位，就可以将该键值对存放在这个位置里，否则顺序存放到下一个桶内。每个槽位都有一个字节的元数据与之对应，当元数据为000000的时候，表示该槽位是空的，11111110表示该槽位上的元素被删除了，否则该槽位存在一个元素，其对应的元数据的首位为1，剩下的七位为第二个哈希函数计算出来的值。</p>
-<h5 id="2-2-2-1-为什么需要一个字节的元数据"><a href="#2-2-2-1-为什么需要一个字节的元数据" class="headerlink" title="2.2.2.1 为什么需要一个字节的元数据"></a>2.2.2.1 为什么需要一个字节的元数据</h5><p>元数据被用来快速检索，可以通过SIMD(单指令多数据)指令通过位运算快速判断组内是否存在空闲元素，或者已经满了, 以及匹配第二个哈希码计算出来的七位元数据相匹配的槽位。16 x 8 &#x3D; 124bit,能够放入L1缓存，所以是缓存友好的。</p>
+<p>将16个键值对划分为一组，也可以把这个组叫做桶，存放在逻辑连续的线性地址空间内。(哈希函数计算的64位哈希值的前57位)/(哈希表的容量)计算出某个key对应的桶，如果桶内存在空闲或者键值对被删除的槽位，就可以将该键值对存放在这个位置里，否则顺序存放到下一个桶内。每个槽位都有一个字节的元数据与之对应，当元数据为000000的时候，表示该槽位是空的，11111110表示该槽位上的元素被删除了，否则该槽位存在一个元素，其对应的元数据的首位为1，剩下的七位为第二个哈希函数计算出来的值。</p>
+<h5 id="2-2-2-1-为什么需要一个字节的元数据"><a href="#2-2-2-1-为什么需要一个字节的元数据" class="headerlink" title="2.2.2.1 为什么需要一个字节的元数据"></a>2.2.2.1 为什么需要一个字节的元数据</h5><p>元数据被用来快速检索，可以通过SIMD(单指令多数据)指令通过位运算快速判断组内是否存在空闲元素，或者已经满了, 以及匹配第二个哈希码计算出来的七位元数据相匹配的槽位。16 x 8 = 124bit,能够放入L1缓存，所以是缓存友好的。</p>
 <h5 id="2-2-2-2-哈希冲突"><a href="#2-2-2-2-哈希冲突" class="headerlink" title="2.2.2.2 哈希冲突"></a>2.2.2.2 哈希冲突</h5><p>哈希表通过空间换时间，只要选择的hash函数足够好，计算出来的哈希值分布均匀，那么某个元素应为哈希冲突，需要存储到下一个桶的情况应该很少。</p>
 <h5 id="2-2-2-3查询数据"><a href="#2-2-2-3查询数据" class="headerlink" title="2.2.2.3查询数据"></a>2.2.2.3查询数据</h5><ol>
 <li><p>先通过第一个函数计算出哈希值，找到桶的位置</p>
@@ -599,7 +599,7 @@
             <p>原文作者：<a href="https://kairbon.github.io">Kairbon</a>
             <p>原文链接：<a href="https://kairbon.github.io/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Algorithm%E5%92%8CData%20Struct/">https://kairbon.github.io/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Algorithm%E5%92%8CData%20Struct/</a>
             <p>发表日期：<a href="https://kairbon.github.io/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Algorithm%E5%92%8CData%20Struct/">May 21st 2021, 5:52:56 pm</a>
-            <p>更新日期：<a href="https://kairbon.github.io/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Algorithm%E5%92%8CData%20Struct/">October 10th 2022, 4:23:12 am</a>
+            <p>更新日期：<a href="https://kairbon.github.io/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-Algorithm%E5%92%8CData%20Struct/">October 17th 2022, 4:15:32 am</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -998,8 +998,6 @@
         
         
     
-        
-        
         
         
         

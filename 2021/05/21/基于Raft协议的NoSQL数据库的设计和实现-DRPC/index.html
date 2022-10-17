@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://kairbon.github.io/images/image-figure_drpc_3.png">
 <meta property="og:image" content="https://kairbon.github.io/images/image-figure_drpc_4.png">
 <meta property="article:published_time" content="2021-05-21T18:52:56.000Z">
-<meta property="article:modified_time" content="2022-10-10T04:23:12.456Z">
+<meta property="article:modified_time" content="2022-10-17T04:15:32.784Z">
 <meta property="article:author" content="Kairbon">
 <meta property="article:tag" content="分布式系统">
 <meta name="twitter:card" content="summary">
@@ -514,16 +514,16 @@
 </ol>
 <p>对于DRPC来说，我们不仅要实现基本功能，更要足够负荷大数据的性能。于是实现方面我们参考了业界通用的Netty作为脚手架工具去在此基础上实现我们自己的RPC。</p>
 <h3 id="1-RPC架构设计"><a href="#1-RPC架构设计" class="headerlink" title="1. RPC架构设计"></a>1. RPC架构设计</h3><p>Netty是由JBOSS提供的一个java开源框架，现为 Github上的独立项目。Netty提供异步的、事件驱动的网络应用程序框架和工具，用以快速开发高性能、高可靠性的网络服务器和客户端程序。也就是说，Netty 是一个基于NIO的客户、服务器端的编程框架，使用Netty 可以确保你快速和简单的开发出一个网络应用，例如实现了某种协议的客户、服务端应用。Netty相当于简化和流线化了网络应用的编程开发过程，例如：基于TCP和UDP的socket服务开发。DRPC基于Netty构建而成。</p>
-<h4 id="1-1-NIO"><a href="#1-1-NIO" class="headerlink" title="1.1 NIO"></a>1.1 NIO</h4><p>NIO和BIO不同，是同步非阻塞的，服务器实现模式为一个请求一个线程，但客户端发送的连接请求都会注册到多路复用器上，多路复用器轮询到连接有I&#x2F;O请求时才启动一个线程进行处理。</p>
+<h4 id="1-1-NIO"><a href="#1-1-NIO" class="headerlink" title="1.1 NIO"></a>1.1 NIO</h4><p>NIO和BIO不同，是同步非阻塞的，服务器实现模式为一个请求一个线程，但客户端发送的连接请求都会注册到多路复用器上，多路复用器轮询到连接有I/O请求时才启动一个线程进行处理。</p>
 <p>在DRPC中，我们将整个远程调用的过程分为两部分，一部分是多路复用部分，我们称之为IO线程，一部分为worker线程，这部分是为了最大程度利用CPU的多核性能。</p>
 <p><img src="/images/image-figure_drpc_1.png" alt="figure 1"></p>
 <center>图一 DRPC架构</center>
 
 <p>可这样做真的是最大化利用带宽和性能了吗？因为我们使用的是NIO实现标准模式中的Reactor模型标准去构建我们整个RPC，下面先简单介绍一下Reactor，然后再回答这个问题。</p>
-<h4 id="1-2-Reactor模型"><a href="#1-2-Reactor模型" class="headerlink" title="1.2 Reactor模型"></a>1.2 Reactor模型</h4><p>I&#x2F;O多路复用可以用作并发事件驱动(event-driven)程序的基础，即整个事件驱动模型是一个状态机，包含了状态(state), 输入事件(input-event), 状态转移(transition), 状态转移即状态到输入事件的一组映射。通过I&#x2F;O多路复用的技术检测事件的发生，并根据具体的事件(通常为读写)，进行不同的操作，即状态转移。</p>
+<h4 id="1-2-Reactor模型"><a href="#1-2-Reactor模型" class="headerlink" title="1.2 Reactor模型"></a>1.2 Reactor模型</h4><p>I/O多路复用可以用作并发事件驱动(event-driven)程序的基础，即整个事件驱动模型是一个状态机，包含了状态(state), 输入事件(input-event), 状态转移(transition), 状态转移即状态到输入事件的一组映射。通过I/O多路复用的技术检测事件的发生，并根据具体的事件(通常为读写)，进行不同的操作，即状态转移。</p>
 <p><code>Reactor</code>模式是一种典型的事件驱动的编程模型，<code>Reactor</code>逆置了程序处理的流程，其基本的思想即为<code>Hollywood Principle— &#39;Don&#39;t call us, we&#39;ll call you&#39;</code>。</p>
 <p>普通的函数处理机制为：调用某函数-&gt; 函数执行， 主程序等待阻塞-&gt; 函数将结果返回给主程序-&gt; 主程序继续执行。</p>
-<p><code>Reactor</code>事件处理机制为：主程序将事件以及对应事件处理的方法在<code>Reactor</code>上进行注册, 如果相应的事件发生，<code>Reactor</code>将会主动调用事件注册的接口，即回调函数. <code>libevent</code>即为封装了<code>epoll</code>并注册相应的事件(I&#x2F;O读写，时间事件，信号事件)以及回调函数，实现的事件驱动的框架。</p>
+<p><code>Reactor</code>事件处理机制为：主程序将事件以及对应事件处理的方法在<code>Reactor</code>上进行注册, 如果相应的事件发生，<code>Reactor</code>将会主动调用事件注册的接口，即回调函数. <code>libevent</code>即为封装了<code>epoll</code>并注册相应的事件(I/O读写，时间事件，信号事件)以及回调函数，实现的事件驱动的框架。</p>
 <p>使用Reactor模型在工业场景下中有非常明显的优势。</p>
 <p>从结构上区分，可以将Reactor模型分为三种模型：</p>
 <h5 id="1-2-1-单IO线程，单Worker线程。"><a href="#1-2-1-单IO线程，单Worker线程。" class="headerlink" title="1.2.1 单IO线程，单Worker线程。"></a>1.2.1 单IO线程，单Worker线程。</h5><p><img src="/images/image-figure_drpc_2.png" alt="figure 2"></p>
@@ -638,7 +638,7 @@
             <p>原文作者：<a href="https://kairbon.github.io">Kairbon</a>
             <p>原文链接：<a href="https://kairbon.github.io/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-DRPC/">https://kairbon.github.io/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-DRPC/</a>
             <p>发表日期：<a href="https://kairbon.github.io/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-DRPC/">May 21st 2021, 6:52:56 pm</a>
-            <p>更新日期：<a href="https://kairbon.github.io/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-DRPC/">October 10th 2022, 4:23:12 am</a>
+            <p>更新日期：<a href="https://kairbon.github.io/2021/05/21/%E5%9F%BA%E4%BA%8ERaft%E5%8D%8F%E8%AE%AE%E7%9A%84NoSQL%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0-DRPC/">October 17th 2022, 4:15:32 am</a>
             <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
     
@@ -1037,8 +1037,6 @@
         
         
     
-        
-        
         
         
         

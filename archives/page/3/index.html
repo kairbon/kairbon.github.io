@@ -436,14 +436,15 @@
             <div class="abstract-content">
                 分布式事务-2pc,3pc原作者 https://www.cnblogs.com/qdhxhz/p/11167025.html 
 1. 2pc(two phase commit)两阶段提交又称2PC,2PC是一个非常经典的强一致、中心化的原子提交协议。
-这里所说的中心化是指协议中有两类节点：一个是中心化协调者节点（coordinator）和N个参与者节点（partcipant）。两个阶段：第一阶段：投票阶段 和第二阶段：提交&#x2F;执行阶段。举例 订单服务A，需要调用 支付服务B 去支付，支付成功则处理购物订单为待发货状态，否则就需要将购物订单处理为失败状态。
-那么看2PC阶段是如何...
+这里所说的中心化是指协议中有两类节点：一个是中心化协调者节点（coordinator）和N个参与者节点（partcipant）。两个阶段：第一阶段：投票阶段 和第二阶段：提交/执行阶段。举例 订单服务A，需要调用 支付服务B 去支付，支付成功则处理购物订单为待发货状态，否则就需要将购物订单处理为失败状态。
+那么看2PC阶段是如何处理的
+1...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2022/10/10">
+                <div class="abstract-date" title="Last updated: 2022/10/17">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/03/14</span>
                 </div>
                 <!-- tags -->
@@ -485,7 +486,7 @@ RocketMQ分布式架构RocketMQ的分布式架构挺有特点的，抛开nameser
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2022/10/10">
+                <div class="abstract-date" title="Last updated: 2022/10/17">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/02/08</span>
                 </div>
                 <!-- tags -->
@@ -521,7 +522,7 @@ RocketMQ分布式架构RocketMQ的分布式架构挺有特点的，抛开nameser
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2022/10/10">
+                <div class="abstract-date" title="Last updated: 2022/10/17">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/01/21</span>
                 </div>
                 <!-- tags -->
@@ -563,7 +564,7 @@ RocketMQ分布式架构RocketMQ的分布式架构挺有特点的，抛开nameser
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2022/10/10">
+                <div class="abstract-date" title="Last updated: 2022/10/17">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/08/30</span>
                 </div>
                 <!-- tags -->
@@ -598,7 +599,7 @@ RocketMQ分布式架构RocketMQ的分布式架构挺有特点的，抛开nameser
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2022/10/10">
+                <div class="abstract-date" title="Last updated: 2022/10/17">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/01/13</span>
                 </div>
                 <!-- tags -->
@@ -627,14 +628,14 @@ RocketMQ分布式架构RocketMQ的分布式架构挺有特点的，抛开nameser
                 <span class="abstract-title-text">Dst-Server实现WorkerPool的必要性思考</span>
             </a>
             <div class="abstract-content">
-                前言​	（本文适合对Dst项目有一定认识的人阅读）项目地址
-​	最近，我一直有一个问题，我始终没有思考明白，Dst中，Dst-Server 要采用WorkerPool的模型去进行数据操作的必要性有多大，因为从实现角度而言，Dst所采用的DRPC是基于Netty的。对于Netty来说，他的Worker线程池完全可以复用。比如加一个ThreadLocal的变量，也就是Shard。按照架构设计的话也是没有问题的，而且Netty的Worker线程中也有BlockingQueue，这样对一个Shard的操作也是不会出现冲突的情况，会按照入队的顺序去执行相应的操作。所以从实现角度来说说不定这种方法的...
+                前言​    （本文适合对Dst项目有一定认识的人阅读）项目地址
+​    最近，我一直有一个问题，我始终没有思考明白，Dst中，Dst-Server 要采用WorkerPool的模型去进行数据操作的必要性有多大，因为从实现角度而言，Dst所采用的DRPC是基于Netty的。对于Netty来说，他的Worker线程池完全可以复用。比如加一个ThreadLocal的变量，也就是Shard。按照架构设计的话也是没有问题的，而且Netty的Worker线程中也有BlockingQueue，这样对一个Shard的操作也是不会出现冲突的情况，会按照入队的顺序去执行相应的操作。所以从实现角度来说说不...
             </div>
             <!-- read more -->
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2022/10/10">
+                <div class="abstract-date" title="Last updated: 2022/10/17">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/12/19</span>
                 </div>
                 <!-- tags -->
@@ -674,7 +675,7 @@ RocketMQ分布式架构RocketMQ的分布式架构挺有特点的，抛开nameser
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2022/10/10">
+                <div class="abstract-date" title="Last updated: 2022/10/17">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/23</span>
                 </div>
                 <!-- tags -->
@@ -714,7 +715,7 @@ MongoDB 是一款基于文档的通用分布式数据库
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2022/10/10">
+                <div class="abstract-date" title="Last updated: 2022/10/17">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/20</span>
                 </div>
                 <!-- tags -->
@@ -752,7 +753,7 @@ Nginx的反向代理实际上是客户端和真实的应用服务器之间的一
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2022/10/10">
+                <div class="abstract-date" title="Last updated: 2022/10/17">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/18</span>
                 </div>
                 <!-- tags -->
@@ -788,7 +789,7 @@ Nginx的反向代理实际上是客户端和真实的应用服务器之间的一
             
             <div class="abstract-post-meta">
                 <!-- date -->
-                <div class="abstract-date" title="Last updated: 2022/10/10">
+                <div class="abstract-date" title="Last updated: 2022/10/17">
                     <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/07/18</span>
                 </div>
                 <!-- tags -->
@@ -1100,8 +1101,6 @@ Nginx的反向代理实际上是客户端和真实的应用服务器之间的一
         
         
     
-        
-        
         
         
         
